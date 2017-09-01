@@ -5,4 +5,12 @@
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_friends">FriendsActivity</string>
     <string name="title_activity_notification">NotificationActivity</string>
+    <string name="add_contact">Add From Contact</string>
+    <string name="name">Name</string>
+    <string name="email">E-mail</string>
+    <string name="dob">Date Of Birth</string>
+    <string name="save">Save</string>
+    <string name="back">Back</string>
+    <string name="add">Add</string>
+    <string name="cancel">Cancel</string>
 </resources>

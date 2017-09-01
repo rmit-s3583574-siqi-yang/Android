@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.skye.friendsup.R;
 
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
+                    Toast.makeText(MainActivity.this, "The "+TAG+" showed up", Toast.LENGTH_LONG).show();
 
                     Intent intentFriends = new Intent(getApplicationContext(), FriendsActivity.class);
                     startActivity(intentFriends);

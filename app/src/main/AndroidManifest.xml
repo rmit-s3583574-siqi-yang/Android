@@ -23,7 +23,8 @@
             android:label="@string/title_activity_friends" />
         <activity
             android:name=".Controllers.NotificationActivity"
-            android:label="@string/title_activity_notification"></activity>
+            android:label="@string/title_activity_notification" />
+        <activity android:name=".Controllers.AddFriendActivity"></activity>
     </application>
 
 </manifest>
