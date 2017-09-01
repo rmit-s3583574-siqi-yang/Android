@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">FriendsUp</string>
+    <string name="title_home">Friends</string>
+    <string name="title_dashboard">Meetings</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_activity_friends">FriendsActivity</string>
+    <string name="title_activity_notification">NotificationActivity</string>
+</resources>
