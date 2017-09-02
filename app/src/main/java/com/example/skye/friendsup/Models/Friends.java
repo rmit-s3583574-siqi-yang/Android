@@ -13,10 +13,10 @@ public class Friends {
     private String friendID;
     private String friendName;
     private String friendEmail;
-    private Calendar friendBD;
-    private Path friendImg;
+    private String friendBD;
+    private int friendImg;
 
-    public Friends(String friendName, String friendEmail, Calendar friendBD, Path friendImg) {
+    public Friends(String friendName, String friendEmail, String friendBD, int friendImg) {
         this.friendID = UUID.randomUUID().toString();
         this.friendName = friendName;
         this.friendEmail = friendEmail;
@@ -46,19 +46,19 @@ public class Friends {
         this.friendEmail = friendEmail;
     }
 
-    public Calendar getFriendBD() {
+    public String getFriendBD() {
         return friendBD;
     }
 
-    public void setFriendBD(Calendar friendBD) {
+    public void setFriendBD(String friendBD) {
         this.friendBD = friendBD;
     }
 
-    public Path getFriendImg() {
+    public int getFriendImg() {
         return friendImg;
     }
 
-    public void setFriendImg(Path friendImg) {
+    public void setFriendImg(int friendImg) {
         this.friendImg = friendImg;
     }
 

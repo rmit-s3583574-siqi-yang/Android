@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.skye.friendsup">
-
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,6 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+
         <activity
             android:name=".Controllers.MainActivity"
             android:label="@string/app_name">
@@ -18,12 +20,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".Controllers.FriendsActivity"
-            android:label="@string/title_activity_friends" />
-        <activity
-            android:name=".Controllers.NotificationActivity"
-            android:label="@string/title_activity_notification" />
         <activity android:name=".Controllers.AddFriendActivity"></activity>
     </application>
 

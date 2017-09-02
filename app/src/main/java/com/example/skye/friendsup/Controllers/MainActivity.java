@@ -7,7 +7,6 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.skye.friendsup.R;
@@ -16,7 +15,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "Status changed ";
 
-    private TextView mTextMessage;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -28,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_home:
                     Toast.makeText(MainActivity.this, "The "+TAG+" showed up", Toast.LENGTH_LONG).show();
 
-                    Intent intentFriends = new Intent(getApplicationContext(), FriendsActivity.class);
+                    Intent intentFriends = new Intent(getApplicationContext(), AddFriendActivity.class);
                     startActivity(intentFriends);
 
                     Log.i(TAG,"Friends pressed");
@@ -36,13 +34,12 @@ public class MainActivity extends AppCompatActivity {
                     //mTextMessage.setText(R.string.title_home);
                     return true;
                 case R.id.navigation_dashboard:
-                    mTextMessage.setText(R.string.title_dashboard);
+
 
                     Log.i(TAG,"Meetings pressed");
                     return true;
                 case R.id.navigation_notifications:
-                    Intent intentNotif = new Intent(getApplicationContext(), NotificationActivity.class);
-                    startActivity(intentNotif);
+
                     Log.i(TAG,"Notification pressed");
                     //mTextMessage.setText(R.string.title_notifications);
                     return true;
@@ -57,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mTextMessage = (TextView) findViewById(R.id.message);
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.main);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         Log.i(TAG,"onCreateMeetings");

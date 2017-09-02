@@ -14,13 +14,10 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
     </FrameLayout>
 
     <android.support.design.widget.BottomNavigationView
-        android:id="@+id/navigation"
+        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"

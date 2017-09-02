@@ -19,8 +19,8 @@ public class Model {
     private String friendID;
     private String friendName;
     private String friendEmail;
-    private Calendar friendBD;
-    private Path friendImg;
+    private String friendBD;
+    private int friendImg;
 
 
     private String meetingID;
@@ -34,7 +34,7 @@ public class Model {
 
     public void addNewFriend(){
 
-        if(this.friendName!=null && this.friendEmail!=null && this.friendBD!=null && this.friendImg!=null){
+        if(this.friendName!=null && this.friendEmail!=null && this.friendBD!=null ){
             Friends newFriend = new Friends(this.friendName, this.friendEmail, this.friendBD, this.friendImg);
             friends.add(newFriend);
         }
@@ -76,6 +76,7 @@ public class Model {
     }
 
 
+
     public String getFriendName() {
         return friendName;
     }
@@ -92,19 +93,19 @@ public class Model {
         this.friendEmail = friendEmail;
     }
 
-    public Calendar getFriendBD() {
+    public String getFriendBD() {
         return friendBD;
     }
 
-    public void setFriendBD(Calendar friendBD) {
+    public void setFriendBD(String friendBD) {
         this.friendBD = friendBD;
     }
 
-    public Path getFriendImg() {
+    public int getFriendImg() {
         return friendImg;
     }
 
-    public void setFriendImg(Path friendImg) {
+    public void setFriendImg(int friendImg) {
         this.friendImg = friendImg;
     }
 
