@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.skye.friendsup.Controllers.AddMeetingActivity">
+
+    <RelativeLayout
+        android:id="@+id/RelayoutBGAdM"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:id="@+id/titleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="72dp"
+            android:ems="10"
+            android:hint="@string/title"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/startText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/titleText"
+            android:layout_alignStart="@+id/titleText"
+            android:layout_below="@+id/titleText"
+            android:ems="10"
+            android:hint="@string/startT"
+            android:inputType="date"
+            android:onClick="refreshTime1" />
+
+        <EditText
+            android:id="@+id/endText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/startText"
+            android:layout_alignStart="@+id/startText"
+            android:layout_below="@+id/startText"
+            android:ems="10"
+            android:hint="@string/endT"
+            android:inputType="date"
+            android:onClick="refreshTime2" />
+
+        <EditText
+            android:id="@+id/locationText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/endText"
+            android:layout_alignStart="@+id/endText"
+            android:layout_below="@+id/endText"
+            android:ems="10"
+            android:hint="@string/location"
+            android:inputType="textPersonName" />
+
+        <Button
+            android:id="@+id/addStartB"
+            android:layout_width="@android:dimen/notification_large_icon_height"
+            android:layout_height="@android:dimen/app_icon_size"
+            android:layout_above="@+id/endText"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:onClick="pickDate1"
+            android:text="@string/add" />
+
+        <Button
+            android:id="@+id/addEndB"
+            android:layout_width="@android:dimen/notification_large_icon_height"
+            android:layout_height="@android:dimen/app_icon_size"
+            android:layout_above="@+id/locationText"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:onClick="pickDate2"
+            android:text="@string/add" />
+
+        <Button
+            android:id="@+id/addMeetingB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:onClick="addNewMeeting"
+            android:text="@string/add" />
+
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>

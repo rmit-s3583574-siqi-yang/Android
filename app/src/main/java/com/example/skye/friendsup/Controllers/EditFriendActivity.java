@@ -13,52 +13,66 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
-import com.example.skye.friendsup.Models.Friends;
-import com.example.skye.friendsup.Models.Model;
+
 import com.example.skye.friendsup.R;
+
 import java.util.Calendar;
+
 import static com.example.skye.friendsup.Controllers.DatePickerFragment.tday;
 import static com.example.skye.friendsup.Controllers.DatePickerFragment.tmonth;
 import static com.example.skye.friendsup.Controllers.DatePickerFragment.tyear;
+import static com.example.skye.friendsup.Controllers.MainActivity.friendPicked;
 import static com.example.skye.friendsup.Controllers.MainActivity.model;
 
-public class AddFriendActivity extends AppCompatActivity{
+public class EditFriendActivity extends AppCompatActivity {
     protected static final int PICK_CONTACTS = 100;
     protected static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 0 ;
-    public static final String TAG = "AddFriend status";
-
+    public static final String TAG = "Activity status";
 
     private String friendName;
     private String friendEmail;
-    private int friendImg = R.drawable.icon0;
-    private int imageCounter = 0;
+    private int friendImg ;
+
+    private ImageView image;
+    private EditText nameText ;
+    private EditText emailText ;
+    private EditText dateText;
+
 
     private int year = tyear;
     private int month = tmonth+1;
     private int day = tday;
-    private Calendar friendBD = Calendar.getInstance();
+    private Calendar friendBD ;
 
-    private boolean datePicked = false;
-
-
-
-
-
-
-    Friends newfriend;
-
+    private int imageCounter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_friend);
-        Log.i(TAG,"onCreateAddFriend");
+        setContentView(R.layout.activity_edit_friend);
+        Log.i(TAG,"onCreateEditFriend");
 
 
+        friendImg = R.drawable.icon0;
+        image = (ImageView)findViewById(R.id.imageView2);
+        image.setImageResource(model.getFriends().get(friendPicked).getFriendImg());
+
+        nameText = (EditText)findViewById(R.id.nameText2);
+        emailText = (EditText)findViewById(R.id.emailText2);
+        nameText.setText(model.getFriends().get(friendPicked).getFriendName());
+        emailText.setText(model.getFriends().get(friendPicked).getFriendEmail());
+
+        dateText = (EditText)findViewById(R.id.dobText2);
+
+        friendBD = model.getFriends().get(friendPicked).getFriendBD();
+
+        dateText.setText(model.getFriends().get(friendPicked).getFriendBD().get(Calendar.DAY_OF_MONTH)+
+                "/"+model.getFriends().get(friendPicked).getFriendBD().get(Calendar.MONTH)+
+                "/"+model.getFriends().get(friendPicked).getFriendBD().get(Calendar.YEAR));
     }
 
-    public void changeImage(View view){
-        ImageView image = (ImageView)findViewById(R.id.imageView);
+    public void changeImage2(View view){
+
         if(imageCounter==0){
             image.setImageResource(R.drawable.icon1);
             friendImg = R.drawable.icon1;
@@ -83,7 +97,7 @@ public class AddFriendActivity extends AppCompatActivity{
 
     }
 
-    public void addFromContact(View view){
+    public void addFromContact2(View view){
 
         askForContactPermission();
 
@@ -109,8 +123,7 @@ public class AddFriendActivity extends AppCompatActivity{
                     email = contactsManager.getContactEmail();
                     friendName = name;
                     friendEmail = email;
-                    EditText nameText = (EditText)findViewById(R.id.nameText);
-                    EditText emailText = (EditText)findViewById(R.id.emailText);
+
                     nameText.setText(friendName);
                     emailText.setText(friendEmail);
                     //model.setFriendName(friendName);
@@ -129,12 +142,12 @@ public class AddFriendActivity extends AppCompatActivity{
 
     public void askForContactPermission(){
         // Here, thisActivity is the current activity
-        if (ContextCompat.checkSelfPermission(AddFriendActivity.this,
+        if (ContextCompat.checkSelfPermission(EditFriendActivity.this,
                 Manifest.permission.READ_CONTACTS)
                 != PackageManager.PERMISSION_GRANTED) {
 
             // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(AddFriendActivity.this,
+            if (ActivityCompat.shouldShowRequestPermissionRationale(EditFriendActivity.this,
                     Manifest.permission.READ_CONTACTS)) {
 
                 // Show an explanation to the user *asynchronously* -- don't block
@@ -145,7 +158,7 @@ public class AddFriendActivity extends AppCompatActivity{
 
                 // No explanation needed, we can request the permission.
 
-                ActivityCompat.requestPermissions(AddFriendActivity.this,
+                ActivityCompat.requestPermissions(EditFriendActivity.this,
                         new String[]{Manifest.permission.READ_CONTACTS},
                         MY_PERMISSIONS_REQUEST_READ_CONTACTS);
 
@@ -174,7 +187,7 @@ public class AddFriendActivity extends AppCompatActivity{
                     // contacts-related task you need to do.
 
                 } else {
-                    Toast.makeText(AddFriendActivity.this, "Permission denied to read Contact", Toast.LENGTH_LONG).show();
+                    Toast.makeText(EditFriendActivity.this, "Permission denied to read Contact", Toast.LENGTH_LONG).show();
                     Log.i(TAG,"Permission declined");
 
                     // permission denied, boo! Disable the
@@ -189,30 +202,7 @@ public class AddFriendActivity extends AppCompatActivity{
     }
 
 
-    public void addNewFriend(View view){
-        if (friendName!=null && friendEmail!=null && friendBD!=null && datePicked!=false){
-            //model.addNewFriend();
-
-            newfriend = new Friends(friendName,friendEmail,friendBD,friendImg);
-            Log.i(TAG,newfriend.getFriendID());
-            Log.i(TAG,newfriend.getFriendName());
-            Log.i(TAG,newfriend.getFriendEmail());
-            Log.i(TAG,""+newfriend.getFriendImg());
-
-
-
-            model.addNewFriend(newfriend);
-            //Log.i(TAG,//model.getFriendID()+"\n"+//model.getFriendName()+"\n"+//model.getFriendEmail()+"\n"+//model.getFriendImg());
-        }
-
-
-    }
-
-    public void pickDate(View view){
-
-
-        EditText dateText = (EditText)findViewById(R.id.dobText);
-        dateText.setText(day+"/"+month+"/"+year);
+    public void pickDate2(View view){
 
         android.app.DialogFragment newFragment = new DatePickerFragment();
         newFragment.show(getFragmentManager(), "datePickFragment");
@@ -223,16 +213,17 @@ public class AddFriendActivity extends AppCompatActivity{
 
         dateText.setText(day+"/"+month+"/"+year);
         friendBD.set(year,month,day);
-        //model.setFriendBD(friendBD);
 
-        datePicked = true;
+
+
         Log.i(TAG,"The friend's BD is "+friendBD.get(Calendar.DAY_OF_MONTH)+"/"+friendBD.get(Calendar.MONTH)+"/"+friendBD.get(Calendar.YEAR));
     }
 
-    public void refreshDate(View view){
+
+    public void refreshDate2(View view){
 
         try{
-            EditText dateText = (EditText)findViewById(R.id.dobText);
+
             year = tyear;
             month = tmonth+1;
             day = tday;
@@ -240,8 +231,7 @@ public class AddFriendActivity extends AppCompatActivity{
             dateText.setText(day+"/"+month+"/"+year);
             friendBD.set(year,month,day);
             Log.i(TAG,"The friend's BD is "+friendBD.get(Calendar.DAY_OF_MONTH)+"/"+friendBD.get(Calendar.MONTH)+"/"+friendBD.get(Calendar.YEAR));
-            //model.setFriendBD(friendBD);
-            datePicked = true;
+
 
         }catch (Exception e){
             Log.e(TAG,e.getMessage());
@@ -251,6 +241,21 @@ public class AddFriendActivity extends AppCompatActivity{
 
     }
 
+    public void editFriend(View view){
+        if (friendName!=null && friendEmail!=null && friendBD!=null ){
+
+
+
+
+            model.getFriends().get(friendPicked).setFriendImg(friendImg);
+            model.getFriends().get(friendPicked).setFriendName(friendName);
+            model.getFriends().get(friendPicked).setFriendEmail(friendEmail);
+            model.getFriends().get(friendPicked).setFriendBD(friendBD);
+
+        }
+
+
+    }
 
 
 
@@ -258,30 +263,30 @@ public class AddFriendActivity extends AppCompatActivity{
     @Override
     protected void onResume() {
         super.onResume();
-        Log.i(TAG,"onResumeAddFriend");
+        Log.i(TAG,"onResumeEditFriend");
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        Log.i(TAG,"onRestartAddFriend");
+        Log.i(TAG,"onRestartEditFriend");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Log.i(TAG,"onStartAddFriend");
+        Log.i(TAG,"onStartEditFriend");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.i(TAG,"onPauseAddFriend");
+        Log.i(TAG,"onPauseEditFriend");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.i(TAG,"onDestroyAddFriend");
+        Log.i(TAG,"onDestroyEditFriend");
     }
 }

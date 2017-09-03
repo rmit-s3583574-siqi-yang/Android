@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.skye.friendsup.Controllers.AddFriendActivity">
+    tools:context="com.example.skye.friendsup.Controllers.EditFriendActivity">
 
     <RelativeLayout
-        android:id="@+id/RelayoutBG"
+        android:id="@+id/RelayoutBG2"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
@@ -24,82 +24,80 @@
         app:layout_constraintVertical_bias="1.0">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/imageView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:contentDescription="@android:string/unknownName"
-            android:onClick="changeImage"
+            android:onClick="changeImage2"
             app:layout_constraintLeft_toLeftOf="parent"
             app:srcCompat="@drawable/icon0"
             tools:layout_editor_absoluteY="70dp" />
 
         <Button
-            android:id="@+id/addFromContact"
+            android:id="@+id/addFromContact2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/imageView"
+            android:layout_below="@+id/imageView2"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
-            android:onClick="addFromContact"
+            android:onClick="addFromContact2"
             android:text="@string/add_contact" />
 
         <EditText
-            android:id="@+id/dobText"
+            android:id="@+id/nameText2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/emailText"
-            android:layout_centerHorizontal="true"
-            android:ems="10"
-            android:inputType="text"
-            android:onClick="refreshDate"
-            android:text="@string/dob" />
-
-        <Button
-            android:id="@+id/addButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:onClick="addNewFriend"
-            android:text="@string/add" />
-
-        <EditText
-            android:id="@+id/nameText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/emailText"
-            android:layout_alignStart="@+id/emailText"
-            android:layout_below="@+id/addFromContact"
+            android:layout_alignLeft="@+id/emailText2"
+            android:layout_alignStart="@+id/emailText2"
+            android:layout_below="@+id/addFromContact2"
             android:ems="10"
             android:inputType="textPersonName"
             android:text="@string/name" />
 
         <EditText
-            android:id="@+id/emailText"
+            android:id="@+id/emailText2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/dobText"
-            android:layout_alignStart="@+id/dobText"
-            android:layout_below="@+id/nameText"
+            android:layout_alignLeft="@+id/dobText2"
+            android:layout_alignStart="@+id/dobText2"
+            android:layout_below="@+id/nameText2"
             android:ems="10"
             android:hint="@string/name"
             android:inputType="textEmailAddress"
             android:text="@string/email" />
 
+        <EditText
+            android:id="@+id/dobText2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/emailText2"
+            android:layout_centerHorizontal="true"
+            android:ems="10"
+            android:inputType="text"
+            android:onClick="refreshDate2"
+            android:text="@string/dob" />
+
         <Button
-            android:id="@+id/pickDate"
+            android:id="@+id/pickDate2"
             android:layout_width="@android:dimen/notification_large_icon_height"
             android:layout_height="@android:dimen/app_icon_size"
-            android:layout_alignBottom="@+id/dobText"
-            android:layout_toEndOf="@+id/dobText"
-            android:layout_toRightOf="@+id/dobText"
-            android:onClick="pickDate"
+            android:layout_alignBottom="@+id/dobText2"
+            android:layout_toEndOf="@+id/dobText2"
+            android:layout_toRightOf="@+id/dobText2"
+            android:onClick="pickDate2"
             android:text="@string/add" />
 
+        <Button
+            android:id="@+id/addButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:onClick="editFriend"
+            android:text="@string/save" />
     </RelativeLayout>
-
 </android.support.constraint.ConstraintLayout>

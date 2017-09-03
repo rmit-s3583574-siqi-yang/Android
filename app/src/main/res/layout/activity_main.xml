@@ -8,20 +8,49 @@
     android:orientation="vertical"
     tools:context="com.example.skye.friendsup.Controllers.MainActivity">
 
-    <FrameLayout
-        android:id="@+id/content"
+    <RelativeLayout
+        android:id="@+id/RelayoutBGMain"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="match_parent">
 
-    </FrameLayout>
+        <Button
+            android:id="@+id/addNewF"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/switchMeeting"
+            android:layout_alignBottom="@+id/switchMeeting"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:onClick="addNewF"
+            android:text="@string/add" />
 
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/main"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="?android:attr/windowBackground"
-        app:menu="@menu/navigation" />
+        <ListView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="@android:dimen/notification_large_icon_height" />
+
+        <Button
+            android:id="@+id/switchMeeting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:onClick="gotoMeeting"
+            android:text="@string/title_dashboard" />
+
+        <TextView
+            android:id="@+id/Friends"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/switchMeeting"
+            android:layout_centerHorizontal="true"
+            android:text="@string/title_home"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+
+    </RelativeLayout>
 
 </LinearLayout>

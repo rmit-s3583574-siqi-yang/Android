@@ -5,7 +5,10 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.IntDef;
+import android.util.Log;
 import android.widget.DatePicker;
+import android.widget.TextView;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -19,6 +22,12 @@ import java.util.Date;
 public class DatePickerFragment extends DialogFragment
         implements DatePickerDialog.OnDateSetListener {
 
+    public static final String TAG = "Picker status";
+
+
+    public static int tyear = 2100;
+    public static int tmonth = 6;
+    public static int tday = 15;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -33,8 +42,15 @@ public class DatePickerFragment extends DialogFragment
     }
 
     public void onDateSet(DatePicker view, int year, int month, int day) {
-        // Do something with the date chosen by the user
+
+        tyear = year;
+        tmonth = month;
+        tday = day;
+        Log.i(TAG,+tday+" "+tmonth+" "+tyear);
+//        pickedDate.set();
     }
+
+
 
 
 }

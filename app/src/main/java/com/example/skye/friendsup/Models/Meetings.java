@@ -1,5 +1,6 @@
 package com.example.skye.friendsup.Models;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
@@ -14,10 +15,10 @@ public class Meetings {
     private String title;
     private Calendar startTime;
     private Calendar endTime;
-    private List<Friends> friendsMeeting;
+    private ArrayList<Friends> friendsMeeting = new ArrayList<>();
     private String location;
 
-    public Meetings(String title, Calendar startTime, Calendar endTime, List<Friends> friendsMeeting, String location) {
+    public Meetings(String title, Calendar startTime, Calendar endTime, ArrayList<Friends> friendsMeeting, String location) {
         this.meetingID = UUID.randomUUID().toString();
         this.title = title;
         this.startTime = startTime;
@@ -60,7 +61,7 @@ public class Meetings {
         return friendsMeeting;
     }
 
-    public void setFriendsMeeting(List<Friends> friendsMeeting) {
+    public void setFriendsMeeting(ArrayList<Friends> friendsMeeting) {
         this.friendsMeeting = friendsMeeting;
     }
 
