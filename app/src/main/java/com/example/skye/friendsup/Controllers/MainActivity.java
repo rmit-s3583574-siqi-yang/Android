@@ -64,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             friendPicked = position;
+
+                            Log.i(TAG,"you picked : "+friendPicked+model.getFriends().get(friendPicked).getFriendName());
                             Intent intentEditFriends = new Intent(getApplicationContext(), EditFriendActivity.class);
                             startActivity(intentEditFriends);
                             //String fruit = String.valueOf(parent.getItemAtPosition(position));

@@ -5,16 +5,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.skye.friendsup.Models.Friends;
-import com.example.skye.friendsup.Models.Meetings;
 import com.example.skye.friendsup.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import static com.example.skye.friendsup.Controllers.MainActivity.model;
-import static com.example.skye.friendsup.Controllers.MeetingActivity.MeetingPicked;
+import static com.example.skye.friendsup.Controllers.MeetingActivity.meetingPicked;
 import static com.example.skye.friendsup.Controllers.TimePickerFragment.thour;
 import static com.example.skye.friendsup.Controllers.TimePickerFragment.tminu;
 
@@ -24,8 +24,8 @@ public class EditMeetingActivity extends AppCompatActivity {
 
 
     private String title;
-    private Calendar startTime = Calendar.getInstance();
-    private Calendar endTime = Calendar.getInstance();
+    private Calendar startTime;
+    private Calendar endTime;
     private ArrayList<Friends> friendsMeeting = new ArrayList<>();
     private String location;
 
@@ -49,12 +49,18 @@ public class EditMeetingActivity extends AppCompatActivity {
         etStart = (EditText)findViewById(R.id.startText2);
         etEnd = (EditText)findViewById(R.id.endText2);
         etLocation = (EditText)findViewById(R.id.locationText2);
-        etTitle.setText(model.getMeetings().get(MeetingPicked).getTitle());
-        etStart.setText(model.getMeetings().get(MeetingPicked).getStartTime().get(Calendar.HOUR_OF_DAY)+
-                ":"+model.getMeetings().get(MeetingPicked).getStartTime().get(Calendar.MINUTE));
-        etEnd.setText(model.getMeetings().get(MeetingPicked).getEndTime().get(Calendar.HOUR_OF_DAY)+
-                ":"+model.getMeetings().get(MeetingPicked).getEndTime().get(Calendar.MINUTE));
-        etLocation.setText(model.getMeetings().get(MeetingPicked).getLocation());
+        etTitle.setText(model.getMeetings().get(meetingPicked).getTitle());
+        etStart.setText(model.getMeetings().get(meetingPicked).getStartTime().get(Calendar.HOUR_OF_DAY)+
+                ":"+model.getMeetings().get(meetingPicked).getStartTime().get(Calendar.MINUTE));
+        etEnd.setText(model.getMeetings().get(meetingPicked).getEndTime().get(Calendar.HOUR_OF_DAY)+
+                ":"+model.getMeetings().get(meetingPicked).getEndTime().get(Calendar.MINUTE));
+        etLocation.setText(model.getMeetings().get(meetingPicked).getLocation());
+
+
+        title = model.getMeetings().get(meetingPicked).getTitle();
+        startTime = model.getMeetings().get(meetingPicked).getStartTime();
+        endTime = model.getMeetings().get(meetingPicked).getEndTime();
+
 
         friendsMeeting.add(model.getFriends().get(0));
 
@@ -67,14 +73,15 @@ public class EditMeetingActivity extends AppCompatActivity {
         title = etTitle.getText().toString();
         location = etLocation.getText().toString();
 
-        if(title!=null && location!=null){
+            model.getMeetings().get(meetingPicked).setTitle(title);
+            model.getMeetings().get(meetingPicked).setStartTime(startTime);
+            model.getMeetings().get(meetingPicked).setEndTime(endTime);
+            model.getMeetings().get(meetingPicked).setFriendsMeeting(friendsMeeting);
+            model.getMeetings().get(meetingPicked).setLocation(location);
 
-            model.getMeetings().get(MeetingPicked).setTitle(title);
-            model.getMeetings().get(MeetingPicked).setStartTime(startTime);
-            model.getMeetings().get(MeetingPicked).setEndTime(endTime);
-            model.getMeetings().get(MeetingPicked).setFriendsMeeting(friendsMeeting);
-            model.getMeetings().get(MeetingPicked).setLocation(location);
-        }
+        Toast.makeText(EditMeetingActivity.this, "Meeting updated",Toast.LENGTH_LONG).show();
+        finish();
+
 
 
 

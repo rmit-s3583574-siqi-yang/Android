@@ -23,6 +23,19 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0">
 
+        <EditText
+            android:id="@+id/editTextLoc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/dobText2"
+            android:layout_alignStart="@+id/dobText2"
+            android:layout_below="@+id/dobText2"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:hint="@string/name"
+            android:inputType="textEmailAddress"
+            android:text="Location" />
+
         <ImageView
             android:id="@+id/imageView2"
             android:layout_width="wrap_content"

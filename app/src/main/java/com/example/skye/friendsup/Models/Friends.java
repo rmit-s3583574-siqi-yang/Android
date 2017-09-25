@@ -16,6 +16,8 @@ public class Friends {
     private Calendar friendBD;
     private int friendImg;
 
+
+
     public Friends(String friendName, String friendEmail, Calendar friendBD, int friendImg) {
         this.friendID = UUID.randomUUID().toString();
         this.friendName = friendName;

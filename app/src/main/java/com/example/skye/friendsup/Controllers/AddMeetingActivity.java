@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.skye.friendsup.Models.Friends;
 import com.example.skye.friendsup.Models.Meetings;
@@ -62,8 +63,13 @@ public class AddMeetingActivity extends AppCompatActivity {
             newMeeting = new Meetings(title,startTime,endTime,friendsMeeting,location);
             model.addNewMeeting(newMeeting);
 
-
+            Toast.makeText(AddMeetingActivity.this, "New meeting added", Toast.LENGTH_LONG).show();
+            finish();
+        }else{
+            Toast.makeText(AddMeetingActivity.this, "You have to fill all the space.",Toast.LENGTH_LONG).show();
         }
+
+
 
     }
 

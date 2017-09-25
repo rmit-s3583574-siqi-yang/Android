@@ -3,7 +3,9 @@ package com.example.skye.friendsup.Controllers;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.provider.ContactsContract;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -16,8 +18,12 @@ import android.widget.Toast;
 
 import com.example.skye.friendsup.R;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.Calendar;
+import java.util.List;
 
+import static com.example.skye.friendsup.Controllers.DatePickerFragment.datePicked;
 import static com.example.skye.friendsup.Controllers.DatePickerFragment.tday;
 import static com.example.skye.friendsup.Controllers.DatePickerFragment.tmonth;
 import static com.example.skye.friendsup.Controllers.DatePickerFragment.tyear;
@@ -38,6 +44,13 @@ public class EditFriendActivity extends AppCompatActivity {
     private EditText emailText ;
     private EditText dateText;
 
+    //new
+    private EditText location;
+
+    double lat = 0;
+    double lon = 0;
+    String loc = "";
+
 
     private int year = tyear;
     private int month = tmonth+1;
@@ -46,6 +59,7 @@ public class EditFriendActivity extends AppCompatActivity {
 
     private int imageCounter = 0;
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +77,19 @@ public class EditFriendActivity extends AppCompatActivity {
         emailText.setText(model.getFriends().get(friendPicked).getFriendEmail());
 
         dateText = (EditText)findViewById(R.id.dobText2);
+
+
+        friendName = model.getFriends().get(friendPicked).getFriendName();
+        friendEmail = model.getFriends().get(friendPicked).getFriendEmail();
+        friendImg = model.getFriends().get(friendPicked).getFriendImg();
+        friendBD = model.getFriends().get(friendPicked).getFriendBD();
+
+        //new
+        location = (EditText)findViewById(R.id.editTextLoc);
+
+
+
+
 
         friendBD = model.getFriends().get(friendPicked).getFriendBD();
 
@@ -108,6 +135,7 @@ public class EditFriendActivity extends AppCompatActivity {
         startActivityForResult(contactPickerIntent, PICK_CONTACTS);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         Log.i(TAG,"onActivityResult Called");
@@ -128,6 +156,43 @@ public class EditFriendActivity extends AppCompatActivity {
                     emailText.setText(friendEmail);
                     //model.setFriendName(friendName);
                     //model.setFriendEmail(friendEmail);
+
+                    //new
+                    DummyLocationService dummyLocationService=DummyLocationService.getSingletonInstance(this);
+                    List<DummyLocationService.FriendLocation> matched = null;
+                    try
+                    {
+                        // 2 mins either side of 9:46:30 AM
+                        matched = dummyLocationService.getFriendLocationsForTime(DateFormat.getTimeInstance(
+                                DateFormat.MEDIUM).parse("9:46:30 AM"), 2, 0);
+
+                    } catch (ParseException e)
+                    {
+                        e.printStackTrace();
+                    }
+
+
+
+                    for (DummyLocationService.FriendLocation tempItem : matched) {
+                        Log.v("tempItem", friendName);
+                        Log.v("name",tempItem.name);
+
+                        if (tempItem.name.equals(friendName)) {
+
+
+                            lat = tempItem.latitude;
+                            lon = tempItem.longitude;
+                        }
+                    }
+
+                    loc = Double.toString(lat) + "," + Double.toString(lon);
+
+                    //location.setText(loc);
+
+                    location.setText(loc);
+
+
+
                     Log.i(TAG,name);
                     Log.i(TAG,email);
                 } catch (ContactDataManager.ContactQueryException e) {
@@ -211,12 +276,13 @@ public class EditFriendActivity extends AppCompatActivity {
         month = tmonth+1;
         day = tday;
 
-        dateText.setText(day+"/"+month+"/"+year);
-        friendBD.set(year,month,day);
+        while (datePicked==false){
+            dateText.setText(day+"/"+month+"/"+year);
+            friendBD.set(year,month,day);
+            Log.i(TAG,"The friend's BD is "+friendBD.get(Calendar.DAY_OF_MONTH)+"/"+friendBD.get(Calendar.MONTH)+"/"+friendBD.get(Calendar.YEAR));
+        }
 
 
-
-        Log.i(TAG,"The friend's BD is "+friendBD.get(Calendar.DAY_OF_MONTH)+"/"+friendBD.get(Calendar.MONTH)+"/"+friendBD.get(Calendar.YEAR));
     }
 
 
@@ -242,17 +308,16 @@ public class EditFriendActivity extends AppCompatActivity {
     }
 
     public void editFriend(View view){
-        if (friendName!=null && friendEmail!=null && friendBD!=null ){
 
 
+        model.getFriends().get(friendPicked).setFriendImg(friendImg);
+        model.getFriends().get(friendPicked).setFriendName(friendName);
+        model.getFriends().get(friendPicked).setFriendEmail(friendEmail);
+        model.getFriends().get(friendPicked).setFriendBD(friendBD);
 
 
-            model.getFriends().get(friendPicked).setFriendImg(friendImg);
-            model.getFriends().get(friendPicked).setFriendName(friendName);
-            model.getFriends().get(friendPicked).setFriendEmail(friendEmail);
-            model.getFriends().get(friendPicked).setFriendBD(friendBD);
-
-        }
+        Toast.makeText(EditFriendActivity.this, "Your firend "+model.getFriends().get(friendPicked).getFriendName()+"'s infor has been updated", Toast.LENGTH_LONG).show();
+        finish();
 
 
     }

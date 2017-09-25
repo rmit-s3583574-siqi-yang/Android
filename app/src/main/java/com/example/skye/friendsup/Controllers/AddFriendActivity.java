@@ -202,7 +202,12 @@ public class AddFriendActivity extends AppCompatActivity{
 
 
             model.addNewFriend(newfriend);
+
+            Toast.makeText(AddFriendActivity.this,model.getFriends().get(model.getFriends().size()-1).getFriendName()+" added",Toast.LENGTH_LONG).show();
             //Log.i(TAG,//model.getFriendID()+"\n"+//model.getFriendName()+"\n"+//model.getFriendEmail()+"\n"+//model.getFriendImg());
+            finish();
+        }else{
+            Toast.makeText(AddFriendActivity.this,"You have to fill all the space.",Toast.LENGTH_LONG).show();
         }
 
 

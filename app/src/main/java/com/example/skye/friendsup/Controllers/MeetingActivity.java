@@ -17,7 +17,7 @@ import static com.example.skye.friendsup.Controllers.MainActivity.model;
 public class MeetingActivity extends AppCompatActivity {
 
     public static final String TAG = "Meetings status";
-    public static int MeetingPicked = 0;
+    public static int meetingPicked = 0;
 
     private int sizeoMeetings = model.getMeetings().size();
 
@@ -44,7 +44,7 @@ public class MeetingActivity extends AppCompatActivity {
                     new AdapterView.OnItemClickListener(){
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            MeetingPicked = position;
+                            meetingPicked = position;
                             Intent intentEditMeetings = new Intent(getApplicationContext(), EditMeetingActivity.class);
                             startActivity(intentEditMeetings);
                             //String fruit = String.valueOf(parent.getItemAtPosition(position));
@@ -86,7 +86,7 @@ public class MeetingActivity extends AppCompatActivity {
                     new AdapterView.OnItemClickListener(){
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            MeetingPicked = position;
+                            meetingPicked = position;
                             Intent intentEditMeetings = new Intent(getApplicationContext(), EditMeetingActivity.class);
                             startActivity(intentEditMeetings);
                             //String fruit = String.valueOf(parent.getItemAtPosition(position));

@@ -28,6 +28,7 @@ public class DatePickerFragment extends DialogFragment
     public static int tyear = 2100;
     public static int tmonth = 6;
     public static int tday = 15;
+    public static boolean datePicked = false;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -47,6 +48,7 @@ public class DatePickerFragment extends DialogFragment
         tmonth = month;
         tday = day;
         Log.i(TAG,+tday+" "+tmonth+" "+tyear);
+        datePicked = true ;
 //        pickedDate.set();
     }
 
