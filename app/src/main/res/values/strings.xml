@@ -17,5 +17,6 @@
     <string name="startT">Start Time</string>
     <string name="endT">End Time</string>
     <string name="location">Location</string>
+    <string name="title_activity_maps">Map</string>
 
 </resources>

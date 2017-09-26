@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.skye.friendsup.Models.DataNotNull;
 import com.example.skye.friendsup.Models.Model;
+import com.example.skye.friendsup.NetworkStateService;
 import com.example.skye.friendsup.R;
 
 public class MainActivity extends AppCompatActivity {
@@ -39,6 +40,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        Intent network=new Intent(this,NetworkStateService.class);
+        startService(network);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.i(TAG,"onCreateFriends");
