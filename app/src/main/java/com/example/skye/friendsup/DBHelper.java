@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.skye.friendsup.Models.Friend;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -20,6 +21,10 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public DBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
+    }
+
+    public DBHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
@@ -51,25 +56,21 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    public HashMap<Long, Friend> getAllFriends() {
-        HashMap<Long, Friend> friends = new LinkedHashMap<Long, Friend>();
+    public ArrayList<Friend> getAllFriends() {
+        ArrayList<Friend> friends = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = db.rawQuery("SELECT * FROM " + Friend.TABLE_NAME, null);
-
-        // Add friend to hash map for each row result
+        Cursor cursor = db.rawQuery("SELECT * FROM " + Friend.TABLE_NAME + " ORDER BY " + Friend.COLUMN_NAME, null);
+        // Add reminder to hash map for each row result
         if (cursor.moveToFirst()) {
             do {
                 Friend  f = new Friend(cursor.getLong(0), cursor.getString(1), cursor.getString(2), cursor.getLong(3));
-                friends.put(f.getId(), f);
+                friends.add(f);
             } while (cursor.moveToNext());
         }
-
         // Close cursor
         cursor.close();
-
         return friends;
-
     }
+
 
 }

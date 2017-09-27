@@ -13,18 +13,15 @@ import android.widget.TextView;
 import java.util.Calendar;
 import java.util.Date;
 
-//import static com.example.skye.friendsup.Controllers.AddFriendActivity.dateText;
 
 /**
  * Created by skye on 2/9/17.
  */
 
-public class DatePickerFragment extends DialogFragment
-        implements DatePickerDialog.OnDateSetListener {
+public class DatePickerFragment extends DialogFragment {
 
     public static final String TAG = "Picker status";
-
-
+    // todo:  no need to use this, need to be deleted
     public static int tyear = 2100;
     public static int tmonth = 6;
     public static int tday = 15;
@@ -39,20 +36,7 @@ public class DatePickerFragment extends DialogFragment
         int day = c.get(Calendar.DAY_OF_MONTH);
 
         // Create a new instance of DatePickerDialog and return it
-        return new DatePickerDialog(getActivity(), this, year, month, day);
+        return new DatePickerDialog(getActivity(), (DatePickerDialog.OnDateSetListener)getActivity(), year, month, day);
     }
-
-    public void onDateSet(DatePicker view, int year, int month, int day) {
-
-        tyear = year;
-        tmonth = month;
-        tday = day;
-        Log.i(TAG,+tday+" "+tmonth+" "+tyear);
-        datePicked = true ;
-//        pickedDate.set();
-    }
-
-
-
 
 }

@@ -46,6 +46,12 @@ public class Friend {
         this.avatar = avatar;
     }
 
+    public Friend(String name, String email, long birthday) {
+        this.name = name;
+        this.email = email;
+        this.birthday = birthday;
+    }
+
     public Friend(long id, String name, String email, long birthday, int avatar) {
         this.id = id;
         this.name = name;

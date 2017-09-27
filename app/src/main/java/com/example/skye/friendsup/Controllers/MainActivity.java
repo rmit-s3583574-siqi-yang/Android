@@ -12,25 +12,36 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.skye.friendsup.DBHelper;
 import com.example.skye.friendsup.Models.DataNotNull;
+import com.example.skye.friendsup.Models.Friend;
 import com.example.skye.friendsup.Models.Model;
 import com.example.skye.friendsup.NetworkStateService;
 import com.example.skye.friendsup.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.example.skye.friendsup.R.id.friendList;
+
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "Friends status";
+    private ArrayList<Friend> friendsList;
+    private FriendListAdapter friendListAdapter;
+    private DBHelper dbHelper;
     public static Model model = new Model();
     public static int friendPicked = 0;
-
-
-    public DataNotNull setDemoData = new DataNotNull();
-
-    private int sizeoFriends = model.getFriends().size();
-
-    private String[] listoFriends ;
+//
+//
+//    public DataNotNull setDemoData = new DataNotNull();
+//
+//    private int sizeoFriends = model.getFriends().size();
+//
+//    private String[] listoFriends ;
 
 
 
@@ -41,46 +52,26 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        Intent network=new Intent(this,NetworkStateService.class);
-        startService(network);
+
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.i(TAG,"onCreateFriends");
 
+        Intent network=new Intent(this,NetworkStateService.class);
+        startService(network);
 
-        setDemoData.setDemoData();
+        ListView friendsListView = (ListView) findViewById(friendList);
+        TextView emptyText = (TextView)findViewById(R.id.emptyFriendList);
+        friendsListView.setEmptyView(emptyText);
 
+        // Get our database helper
+        dbHelper = new DBHelper(getApplicationContext());
 
-        try{
+        friendsList = dbHelper.getAllFriends();
 
-            int sizeoFriends = model.getFriends().size();
-            listoFriends = new String[sizeoFriends];
-            for(int i = 0; i < sizeoFriends; i++){
-                listoFriends[i] = model.getFriends().get(i).getFriendName();
-            }
-
-            ListAdapter friendsListAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,listoFriends);
-            ListView friendsListView = (ListView)findViewById(R.id.listView);
-            friendsListView.setAdapter(friendsListAdapter);
-
-            friendsListView.setOnItemClickListener(
-                    new AdapterView.OnItemClickListener(){
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            friendPicked = position;
-
-                            Log.i(TAG,"you picked : "+friendPicked+model.getFriends().get(friendPicked).getFriendName());
-                            Intent intentEditFriends = new Intent(getApplicationContext(), EditFriendActivity.class);
-                            startActivity(intentEditFriends);
-                            //String fruit = String.valueOf(parent.getItemAtPosition(position));
-                        }
-                    }
-            );
-        }catch (Exception e){
-            Log.e(TAG,e.getMessage());
-
-        }
+        friendListAdapter = new FriendListAdapter(this, friendsList);
+        friendsListView.setAdapter(friendListAdapter);
 
 
 
@@ -105,20 +96,19 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         Log.i(TAG,"onResumeFriends");
 
-        try{
-            int sizeoFriends = model.getFriends().size();
-            listoFriends = new String[sizeoFriends];
-            for(int i = 0; i < sizeoFriends; i++){
-                listoFriends[i] = model.getFriends().get(i).getFriendName();
-            }
-
-            ListAdapter friendsListAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,listoFriends);
-            ListView friendsListView = (ListView)findViewById(R.id.listView);
-            friendsListView.setAdapter(friendsListAdapter);
-        }catch (Exception e){
-            Log.e(TAG,e.getMessage());
-
-        }
+//        try{
+//            int sizeoFriends = model.getFriends().size();
+//            listoFriends = new String[sizeoFriends];
+//            for(int i = 0; i < sizeoFriends; i++){
+//                listoFriends[i] = model.getFriends().get(i).getFriendName();
+//            }
+//
+//            ListAdapter friendsListAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,listoFriends);
+//            ListView friendsListView = (ListView)findViewById(R.id.listView);
+//            friendsListView.setAdapter(friendsListAdapter);
+//        }catch (Exception e){
+//            Log.e(TAG,e.getMessage());
+//        }
     }
 
     @Override

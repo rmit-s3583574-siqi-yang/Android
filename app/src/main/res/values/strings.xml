@@ -18,5 +18,9 @@
     <string name="endT">End Time</string>
     <string name="location">Location</string>
     <string name="title_activity_maps">Map</string>
+    <string name="empty_friend_list">No friends, please add friends</string>
+    <string name="press_to_pick_date">Press to pick date</string>
+    <string name="birthday">Birthday</string>
+    <string name="import_from_contact">Import from contact</string>
 
 </resources>

@@ -1,8 +1,11 @@
 package com.example.skye.friendsup.Controllers;
 
 import android.Manifest;
+import android.app.DatePickerDialog;
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+
 import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -10,42 +13,46 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.skye.friendsup.DBHelper;
+import com.example.skye.friendsup.Models.Friend;
 import com.example.skye.friendsup.Models.Friends;
 import com.example.skye.friendsup.Models.Model;
 import com.example.skye.friendsup.R;
-import java.util.Calendar;
-import static com.example.skye.friendsup.Controllers.DatePickerFragment.tday;
-import static com.example.skye.friendsup.Controllers.DatePickerFragment.tmonth;
-import static com.example.skye.friendsup.Controllers.DatePickerFragment.tyear;
-import static com.example.skye.friendsup.Controllers.MainActivity.model;
 
-public class AddFriendActivity extends AppCompatActivity{
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
+
+
+
+public class AddFriendActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
     protected static final int PICK_CONTACTS = 100;
     protected static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 0 ;
     public static final String TAG = "AddFriend status";
 
 
-    private String friendName;
-    private String friendEmail;
     private int friendImg = R.drawable.icon0;
     private int imageCounter = 0;
 
-    private int year = tyear;
-    private int month = tmonth+1;
-    private int day = tday;
-    private Calendar friendBD = Calendar.getInstance();
-
-    private boolean datePicked = false;
-
-
+    private EditText nameText;
+    private EditText emailText;
+    private TextView dobText;
+    private Button addFriendBtn;
+    private Button addFromContact;
+    private DBHelper dbHelper;
 
 
 
 
-    Friends newfriend;
 
 
     @Override
@@ -53,9 +60,70 @@ public class AddFriendActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_friend);
         Log.i(TAG,"onCreateAddFriend");
+        nameText = (EditText)findViewById(R.id.nameText);
+        emailText = (EditText)findViewById(R.id.emailText);
+        dobText= (EditText)findViewById(R.id.dobText);
+        addFriendBtn = (Button) findViewById(R.id.addFriendButton);
+        addFromContact = (Button) findViewById(R.id.addFromContact);
+
+        dbHelper = new DBHelper(getApplicationContext());
+
+        addFriendBtn.setOnClickListener(addFriendActivityListener);
+        addFromContact.setOnClickListener(addFriendActivityListener);
+        dobText.setOnClickListener(addFriendActivityListener);
+        dobText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(b){
+                    pickDate();
+                }
+            }
+        });
 
 
     }
+
+    // Create an anonymous implementation of OnClickListener
+    private View.OnClickListener addFriendActivityListener = new View.OnClickListener() {
+        public void onClick(View v) {
+           switch (v.getId()){
+               case R.id.dobText:
+                   pickDate();
+               case R.id.addFriendButton:
+                   addFriend();
+                   break;
+               case R.id.addFromContact:
+                   addFromContact();
+                   break;
+               default:
+                   break;
+           }
+
+        }
+    };
+
+    private void addFriend(){
+        try {
+
+            String name = nameText.getText().toString().trim();
+            String email = emailText.getText().toString().trim();
+            String dobString = dobText.getText().toString().trim();
+            if(name.isEmpty() || email.isEmpty() || dobString.isEmpty()){
+
+            }
+            else{
+                SimpleDateFormat sdf = new SimpleDateFormat("d/m/yyyy");
+                long dob = sdf.parse(dobString).getTime();
+                Friend friend = new Friend(name,email,dob);
+                dbHelper.addFriend(friend);
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
     public void changeImage(View view){
         ImageView image = (ImageView)findViewById(R.id.imageView);
@@ -83,10 +151,8 @@ public class AddFriendActivity extends AppCompatActivity{
 
     }
 
-    public void addFromContact(View view){
-
+    public void addFromContact(){
         askForContactPermission();
-
     }
 
     public void getContact(){
@@ -102,24 +168,11 @@ public class AddFriendActivity extends AppCompatActivity{
             if (resultCode == RESULT_OK) {
                 Log.i(TAG,"ready to get results");
                 ContactDataManager contactsManager = new ContactDataManager(this, data);
-                String name = "";
-                String email = "";
                 try {
-                    name = contactsManager.getContactName();
-                    email = contactsManager.getContactEmail();
-                    friendName = name;
-                    friendEmail = email;
-                    EditText nameText = (EditText)findViewById(R.id.nameText);
-                    EditText emailText = (EditText)findViewById(R.id.emailText);
-                    nameText.setText(friendName);
-                    emailText.setText(friendEmail);
-                    //model.setFriendName(friendName);
-                    //model.setFriendEmail(friendEmail);
-                    Log.i(TAG,name);
-                    Log.i(TAG,email);
+                    nameText.setText(contactsManager.getContactName());
+                    emailText.setText(contactsManager.getContactEmail());
                 } catch (ContactDataManager.ContactQueryException e) {
                     Log.e(TAG, e.getMessage());
-
                 }
             }
         }
@@ -189,72 +242,13 @@ public class AddFriendActivity extends AppCompatActivity{
     }
 
 
-    public void addNewFriend(View view){
-        if (friendName!=null && friendEmail!=null && friendBD!=null && datePicked!=false){
-            //model.addNewFriend();
 
-            newfriend = new Friends(friendName,friendEmail,friendBD,friendImg);
-            Log.i(TAG,newfriend.getFriendID());
-            Log.i(TAG,newfriend.getFriendName());
-            Log.i(TAG,newfriend.getFriendEmail());
-            Log.i(TAG,""+newfriend.getFriendImg());
-
-
-
-            model.addNewFriend(newfriend);
-
-            Toast.makeText(AddFriendActivity.this,model.getFriends().get(model.getFriends().size()-1).getFriendName()+" added",Toast.LENGTH_LONG).show();
-            //Log.i(TAG,//model.getFriendID()+"\n"+//model.getFriendName()+"\n"+//model.getFriendEmail()+"\n"+//model.getFriendImg());
-            finish();
-        }else{
-            Toast.makeText(AddFriendActivity.this,"You have to fill all the space.",Toast.LENGTH_LONG).show();
-        }
-
-
-    }
-
-    public void pickDate(View view){
-
-
-        EditText dateText = (EditText)findViewById(R.id.dobText);
-        dateText.setText(day+"/"+month+"/"+year);
-
-        android.app.DialogFragment newFragment = new DatePickerFragment();
+    public void pickDate(){
+        DialogFragment newFragment = new DatePickerFragment();
         newFragment.show(getFragmentManager(), "datePickFragment");
-
-        year = tyear;
-        month = tmonth+1;
-        day = tday;
-
-        dateText.setText(day+"/"+month+"/"+year);
-        friendBD.set(year,month,day);
-        //model.setFriendBD(friendBD);
-
-        datePicked = true;
-        Log.i(TAG,"The friend's BD is "+friendBD.get(Calendar.DAY_OF_MONTH)+"/"+friendBD.get(Calendar.MONTH)+"/"+friendBD.get(Calendar.YEAR));
     }
 
-    public void refreshDate(View view){
 
-        try{
-            EditText dateText = (EditText)findViewById(R.id.dobText);
-            year = tyear;
-            month = tmonth+1;
-            day = tday;
-
-            dateText.setText(day+"/"+month+"/"+year);
-            friendBD.set(year,month,day);
-            Log.i(TAG,"The friend's BD is "+friendBD.get(Calendar.DAY_OF_MONTH)+"/"+friendBD.get(Calendar.MONTH)+"/"+friendBD.get(Calendar.YEAR));
-            //model.setFriendBD(friendBD);
-            datePicked = true;
-
-        }catch (Exception e){
-            Log.e(TAG,e.getMessage());
-
-        }
-
-
-    }
 
 
 
@@ -288,5 +282,14 @@ public class AddFriendActivity extends AppCompatActivity{
     protected void onDestroy() {
         super.onDestroy();
         Log.i(TAG,"onDestroyAddFriend");
+    }
+
+    @Override
+    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        String dateString = sdf.format(calendar.getTime());
+        dobText.setText(dateString);
     }
 }

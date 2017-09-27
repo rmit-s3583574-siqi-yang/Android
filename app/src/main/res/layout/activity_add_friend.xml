@@ -31,7 +31,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:contentDescription="@android:string/unknownName"
-            android:onClick="changeImage"
+
             app:layout_constraintLeft_toLeftOf="parent"
             app:srcCompat="@drawable/icon0"
             tools:layout_editor_absoluteY="70dp" />
@@ -43,63 +43,53 @@
             android:layout_below="@+id/imageView"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
-            android:onClick="addFromContact"
-            android:text="@string/add_contact" />
+            android:text="@string/import_from_contact" />
 
-        <EditText
-            android:id="@+id/dobText"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/emailText"
-            android:layout_centerHorizontal="true"
-            android:ems="10"
-            android:inputType="text"
-            android:onClick="refreshDate"
-            android:text="@string/dob" />
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_below="@+id/addFromContact">
 
-        <Button
-            android:id="@+id/addButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:onClick="addNewFriend"
-            android:text="@string/add" />
+            <EditText
+                android:id="@+id/nameText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
 
-        <EditText
-            android:id="@+id/nameText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/emailText"
-            android:layout_alignStart="@+id/emailText"
-            android:layout_below="@+id/addFromContact"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="@string/name" />
+                android:inputType="textPersonName"
+                android:hint="@string/name" />
 
-        <EditText
-            android:id="@+id/emailText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/dobText"
-            android:layout_alignStart="@+id/dobText"
-            android:layout_below="@+id/nameText"
-            android:ems="10"
-            android:hint="@string/name"
-            android:inputType="textEmailAddress"
-            android:text="@string/email" />
+            <EditText
+                android:id="@+id/emailText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress" />
 
-        <Button
-            android:id="@+id/pickDate"
-            android:layout_width="@android:dimen/notification_large_icon_height"
-            android:layout_height="@android:dimen/app_icon_size"
-            android:layout_alignBottom="@+id/dobText"
-            android:layout_toEndOf="@+id/dobText"
-            android:layout_toRightOf="@+id/dobText"
-            android:onClick="pickDate"
-            android:text="@string/add" />
+            <EditText
+                android:id="@+id/dobText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:ems="10"
+                android:inputType="date"
+                android:hint="@string/birthday" />
+
+            <Button
+                android:id="@+id/addFriendButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/add" />
+        </LinearLayout>
+
+
 
     </RelativeLayout>
 
+
+
 </android.support.constraint.ConstraintLayout>
+
