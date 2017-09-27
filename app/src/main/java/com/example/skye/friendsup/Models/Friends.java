@@ -10,6 +10,30 @@ import java.util.UUID;
  */
 
 public class Friends {
+    public static final String TABLE_NAME = "friends";
+
+    public static final String COLUMN_ID = "id";
+
+    public static final String COLUMN_NAME = "name";
+
+    public static final String COLUMN_EMAIL = "email";
+
+    public static final String COLUMN_BIRTHDAY = "birthday";
+
+    public static final String CREATE_STATEMENT =
+
+            "CREATE TABLE " + TABLE_NAME + "(" +
+
+                    COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+
+                    COLUMN_NAME + " TEXT NOT NULL, " +
+
+                    COLUMN_EMAIL + " TEXT NOT NULL, " +
+
+                    COLUMN_BIRTHDAY + " DATE NOT NULL" +
+
+                    ")";
+
     private String friendID;
     private String friendName;
     private String friendEmail;
