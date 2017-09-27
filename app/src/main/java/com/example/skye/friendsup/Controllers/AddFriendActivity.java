@@ -31,7 +31,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 
 public class AddFriendActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
@@ -109,7 +109,7 @@ public class AddFriendActivity extends AppCompatActivity implements DatePickerDi
             String email = emailText.getText().toString().trim();
             String dobString = dobText.getText().toString().trim();
             if(name.isEmpty() || email.isEmpty() || dobString.isEmpty()){
-
+                Toast.makeText(this, "Please fill all blanks", Toast.LENGTH_SHORT).show();
             }
             else{
                 SimpleDateFormat sdf = new SimpleDateFormat("d/m/yyyy");
