@@ -3,6 +3,8 @@ package com.example.skye.friendsup.Models;
 import java.util.Calendar;
 import java.util.UUID;
 
+import static android.R.attr.id;
+
 /**
  * Created by Yanni on 27/9/17.
  */
@@ -28,17 +30,17 @@ public class Friend {
 
                     COLUMN_EMAIL + " TEXT NOT NULL, " +
 
-                    COLUMN_BIRTHDAY + " DATE NOT NULL" +
+                    COLUMN_BIRTHDAY + " LONG NOT NULL" +
 
                     ")";
 
-    private long id;
+    private int id;
     private String name;
     private String email;
     private long birthday;
     private int avatar;
 
-    public Friend(long id, String name, String email, long birthday) {
+    public Friend(int id, String name, String email, long birthday) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -52,7 +54,7 @@ public class Friend {
         this.birthday = birthday;
     }
 
-    public Friend(long id, String name, String email, long birthday, int avatar) {
+    public Friend(int id, String name, String email, long birthday, int avatar) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -60,11 +62,11 @@ public class Friend {
         this.avatar = avatar;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
