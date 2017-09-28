@@ -51,10 +51,6 @@ public class AddFriendActivity extends AppCompatActivity implements DatePickerDi
     private DBHelper dbHelper;
 
 
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,7 +100,6 @@ public class AddFriendActivity extends AppCompatActivity implements DatePickerDi
 
     private void addFriend(){
         try {
-
             String name = nameText.getText().toString().trim();
             String email = emailText.getText().toString().trim();
             String dobString = dobText.getText().toString().trim();

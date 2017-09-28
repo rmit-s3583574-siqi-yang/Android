@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.skye.friendsup.Models.Friend;
@@ -17,6 +18,8 @@ public class FriendListAdapter extends BaseAdapter {
 
     private ArrayList<Friend> friendArrayList;
     private Context context;
+    private TextView friendName;
+    private TextView friendEmail;
     //private static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd");
 
     public void setFriendArrayList(ArrayList<Friend> friendArrayList) {
@@ -45,15 +48,23 @@ public class FriendListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // Prepare adapter view
-        if (convertView == null) {
+        ViewHolder holder;
+        if (convertView == null) { // if convertView is null
             convertView = LayoutInflater.from(context).inflate(R.layout.item_friend_row, null);
+            holder = new ViewHolder();
+            holder.friendName = (TextView) convertView.findViewById(R.id.friendName);
+            holder.friendEmail = (TextView) convertView.findViewById(R.id.friendEmail);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
         }
-        TextView friendName = (TextView) convertView.findViewById(R.id.friendName);
-        TextView friendEmail = (TextView) convertView.findViewById(R.id.friendEmail);
-        // Set parameters
-        friendName.setText("Name: " + friendArrayList.get(position).getName());
-        friendEmail.setText("Email " + friendArrayList.get(position).getEmail());
+        holder.friendName.setText("Name: " + friendArrayList.get(position).getName());
+        holder.friendEmail.setText("Email " + friendArrayList.get(position).getEmail());
         return convertView;
+    }
+
+     static class ViewHolder {
+        private TextView friendName;
+        public TextView friendEmail;
     }
 }
