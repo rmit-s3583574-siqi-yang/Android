@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
+import static android.R.attr.id;
 import static android.os.Build.VERSION_CODES.M;
 
 public class DBHelper extends SQLiteOpenHelper {
@@ -151,13 +152,45 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    public void removeFriend(Friend f){
+    public Friend getFriendById(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + Friend.TABLE_NAME + " WHERE " + Friend.COLUMN_ID + " = "
+                + id, null);
+
+        Friend f = null;
+        if (cursor.moveToFirst()) {
+            do {
+                f = new Friend(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getLong(3));
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+
+        return f;
+    }
+
+    public void updateFriendById(int id, Friend newFriend){
+        Friend f = getFriendById(id);
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(Friend.COLUMN_NAME, newFriend.getName());
+        contentValues.put(Friend.COLUMN_EMAIL, newFriend.getEmail());
+        String selection = Friend.COLUMN_ID + " = ?"; // where ID column = rowId (that is, selectionArgs)
+        String[] selectionArgs = { String.valueOf(id) };
+
+        db.update(Friend.TABLE_NAME, contentValues, selection,
+                selectionArgs);
+        db.close();
+    }
+
+    public void removeFriend(Friend f) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        db.delete(MeetingFriend.TABLE_NAME, MeetingFriend.COLUMN_FRIEND_ID  + " = ?",
+        db.delete(MeetingFriend.TABLE_NAME, MeetingFriend.COLUMN_FRIEND_ID + " = ?",
                 new String[]{String.valueOf(f.getId())});
 
-        db.delete(Friend.TABLE_NAME, Friend.COLUMN_ID  + " = ?",
+        db.delete(Friend.TABLE_NAME, Friend.COLUMN_ID + " = ?",
                 new String[]{String.valueOf(f.getId())});
 
         db.close();
@@ -172,14 +205,14 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void removeMeeting(Meeting m){
+    public void removeMeeting(Meeting m) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        db.delete(MeetingFriend.TABLE_NAME, MeetingFriend.COLUMN_MEETING_ID  + " = ?",
+        db.delete(MeetingFriend.TABLE_NAME, MeetingFriend.COLUMN_MEETING_ID + " = ?",
                 new String[]{String.valueOf(m.getId())});
 
 
-        db.delete(Meeting.TABLE_NAME, Meeting.COLUMN_ID  + " = ?",
+        db.delete(Meeting.TABLE_NAME, Meeting.COLUMN_ID + " = ?",
                 new String[]{String.valueOf(m.getId())});
 
         db.close();

@@ -111,6 +111,10 @@ public class AddFriendActivity extends AppCompatActivity implements DatePickerDi
                 long dob = sdf.parse(dobString).getTime();
                 Friend friend = new Friend(name,email,dob);
                 dbHelper.addFriend(friend);
+                Intent intent = new Intent();
+                setResult(RESULT_OK, intent);
+                finish();
+
             }
 
         } catch (ParseException e) {
@@ -244,7 +248,14 @@ public class AddFriendActivity extends AppCompatActivity implements DatePickerDi
     }
 
 
-
+    @Override
+    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        String dateString = sdf.format(calendar.getTime());
+        dobText.setText(dateString);
+    }
 
 
 
@@ -279,12 +290,5 @@ public class AddFriendActivity extends AppCompatActivity implements DatePickerDi
         Log.i(TAG,"onDestroyAddFriend");
     }
 
-    @Override
-    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month, day);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        String dateString = sdf.format(calendar.getTime());
-        dobText.setText(dateString);
-    }
+
 }

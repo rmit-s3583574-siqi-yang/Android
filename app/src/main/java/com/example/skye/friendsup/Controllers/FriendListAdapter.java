@@ -52,8 +52,8 @@ public class FriendListAdapter extends BaseAdapter {
         if (convertView == null) { // if convertView is null
             convertView = LayoutInflater.from(context).inflate(R.layout.item_friend_row, null);
             holder = new ViewHolder();
-            holder.friendName = (TextView) convertView.findViewById(R.id.friendName);
-            holder.friendEmail = (TextView) convertView.findViewById(R.id.friendEmail);
+            holder.friendName = convertView.findViewById(R.id.friendName);
+            holder.friendEmail = convertView.findViewById(R.id.friendEmail);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();

@@ -1,9 +1,11 @@
 package com.example.skye.friendsup.Controllers;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -27,7 +29,7 @@ import java.util.List;
 
 import static com.example.skye.friendsup.R.id.friendList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener{
 
     public static final String TAG = "Friends status";
     private ArrayList<Friend> friendsList;
@@ -35,24 +37,11 @@ public class MainActivity extends AppCompatActivity {
     private DBHelper dbHelper;
     public static Model model = new Model();
     public static int friendPicked = 0;
-//
-//
-//    public DataNotNull setDemoData = new DataNotNull();
-//
-//    private int sizeoFriends = model.getFriends().size();
-//
-//    private String[] listoFriends ;
-
-
-
-
-
-
+    private static final int ADD_FRIEND_REQUEST = 1;
+    private static final int EDIT_FRIEND_REQUEST = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -72,43 +61,52 @@ public class MainActivity extends AppCompatActivity {
 
         friendListAdapter = new FriendListAdapter(this, friendsList);
         friendsListView.setAdapter(friendListAdapter);
-
-
-
+        friendsListView.setOnItemClickListener(this);
+        friendsListView.setOnItemLongClickListener(this);
 
     }
 
-    public void addNewF(View view){
-        Intent intentFriends = new Intent(getApplicationContext(), AddFriendActivity.class);
-        startActivity(intentFriends);
 
+    public void addNewF(View view){
+        Intent i = new Intent(getApplicationContext(), AddFriendActivity.class);
+        startActivityForResult(i, ADD_FRIEND_REQUEST);
     }
 
     public void gotoMeeting(View view){
         Intent intentGoMeetings = new Intent(getApplicationContext(), MeetingActivity.class);
         startActivity(intentGoMeetings);
-
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+            case ADD_FRIEND_REQUEST:
+                if (resultCode == RESULT_OK && data != null) {
+                    refreshList();
+                }
+                break;
+            case EDIT_FRIEND_REQUEST:
+                if (resultCode == RESULT_OK && data != null) {
+                   refreshList();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void refreshList(){
+        friendsList = dbHelper.getAllFriends();
+        friendListAdapter.setFriendArrayList(friendsList);
+        friendListAdapter.notifyDataSetChanged();
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
         Log.i(TAG,"onResumeFriends");
 
-//        try{
-//            int sizeoFriends = model.getFriends().size();
-//            listoFriends = new String[sizeoFriends];
-//            for(int i = 0; i < sizeoFriends; i++){
-//                listoFriends[i] = model.getFriends().get(i).getFriendName();
-//            }
-//
-//            ListAdapter friendsListAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,listoFriends);
-//            ListView friendsListView = (ListView)findViewById(R.id.listView);
-//            friendsListView.setAdapter(friendsListAdapter);
-//        }catch (Exception e){
-//            Log.e(TAG,e.getMessage());
-//        }
     }
 
     @Override
@@ -133,5 +131,39 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         Log.i(TAG,"onDestroyFriends");
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+        Intent i = new Intent(this, EditFriendActivity.class);
+        i.putExtra("id",friendsList.get(position).getId());
+        startActivityForResult(i, EDIT_FRIEND_REQUEST);
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+        final int finalPosition = i;
+        AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+        alertDialog.setTitle("Remove Friend?");
+        alertDialog.setMessage("IAre you sure you wish to remove this friend?");
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "YES",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Friend f = friendsList.get(finalPosition);
+                        dbHelper.removeFriend(f);
+                        friendsList = dbHelper.getAllFriends();
+                        friendListAdapter.setFriendArrayList(friendsList);
+                        friendListAdapter.notifyDataSetChanged();
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "NO",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
+        return true;
     }
 }

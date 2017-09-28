@@ -21,7 +21,7 @@ import static com.example.skye.friendsup.Controllers.MainActivity.model;
 
 public class CustomAdapter extends ArrayAdapter<Friends> {
     private Activity activity;
-    private ArrayList<Friends> friends =model.getFriends();;
+    private ArrayList<Friends> friends =model.getFriends();
     private static LayoutInflater inflater = null;
 
     public CustomAdapter(Activity activity, int textViewResourceId, ArrayList<Friends> _friends) {
@@ -63,8 +63,8 @@ public class CustomAdapter extends ArrayAdapter<Friends> {
                 vi = inflater.inflate(R.layout.custom_friend_row, null);
                 holder = new ViewHolder();
 
-                holder.display_name = (TextView) vi.findViewById(R.id.rowText);
-                holder.display_email = (TextView) vi.findViewById(R.id.rowText2);
+                holder.display_name = vi.findViewById(R.id.rowText);
+                holder.display_email = vi.findViewById(R.id.rowText2);
 
 
                 vi.setTag(holder);

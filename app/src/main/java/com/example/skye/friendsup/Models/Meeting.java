@@ -27,11 +27,9 @@ public class Meeting {
 
                     COLUMN_TITLE + " TEXT NOT NULL, " +
 
-                    COLUMN_END_TIME + " TEXT NOT NULL, " +
+                    COLUMN_START_TIME + " LONG NOT NULL, " +
 
-                    COLUMN_START_TIME + " LONG NOT NULL" +
-
-                    COLUMN_END_TIME + " LONG NOT NULL" +
+                    COLUMN_END_TIME + " LONG NOT NULL, " +
 
                     COLUMN_LOCATION + " LONG NOT NULL" +
 
