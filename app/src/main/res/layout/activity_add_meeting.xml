@@ -8,8 +8,8 @@
 
     <RelativeLayout
         android:id="@+id/RelayoutBGAdM"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
@@ -17,7 +17,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp">
 
         <EditText
             android:id="@+id/titleText"
@@ -40,7 +42,7 @@
             android:ems="10"
             android:hint="@string/startT"
             android:inputType="date"
-            android:onClick="refreshTime1" />
+             />
 
         <EditText
             android:id="@+id/endText"
@@ -52,7 +54,7 @@
             android:ems="10"
             android:hint="@string/endT"
             android:inputType="date"
-            android:onClick="refreshTime2" />
+            />
 
         <EditText
             android:id="@+id/locationText"
@@ -65,34 +67,34 @@
             android:hint="@string/location"
             android:inputType="textPersonName" />
 
-        <Button
-            android:id="@+id/addStartB"
-            android:layout_width="@android:dimen/notification_large_icon_height"
-            android:layout_height="@android:dimen/app_icon_size"
-            android:layout_above="@+id/endText"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:onClick="pickDate1"
-            android:text="@string/add" />
+        <!--<Button-->
+            <!--android:id="@+id/addStartB"-->
+            <!--android:layout_width="@android:dimen/notification_large_icon_height"-->
+            <!--android:layout_height="@android:dimen/app_icon_size"-->
+            <!--android:layout_above="@+id/endText"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:onClick="pickDate1"-->
+            <!--android:text="@string/add" />-->
+
+        <!--<Button-->
+            <!--android:id="@+id/addEndB"-->
+            <!--android:layout_width="@android:dimen/notification_large_icon_height"-->
+            <!--android:layout_height="@android:dimen/app_icon_size"-->
+            <!--android:layout_above="@+id/locationText"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:onClick="pickDate2"-->
+            <!--android:text="@string/add" />-->
 
         <Button
-            android:id="@+id/addEndB"
-            android:layout_width="@android:dimen/notification_large_icon_height"
-            android:layout_height="@android:dimen/app_icon_size"
-            android:layout_above="@+id/locationText"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:onClick="pickDate2"
-            android:text="@string/add" />
-
-        <Button
-            android:id="@+id/addMeetingB"
+            android:id="@+id/addMeeting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:onClick="addNewMeeting"
+
             android:text="@string/add" />
 
     </RelativeLayout>

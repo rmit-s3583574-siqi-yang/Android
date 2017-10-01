@@ -15,8 +15,8 @@ import java.util.Calendar;
 
 import static com.example.skye.friendsup.Controllers.MainActivity.model;
 import static com.example.skye.friendsup.Controllers.MeetingActivity.meetingPicked;
-import static com.example.skye.friendsup.Controllers.TimePickerFragment.thour;
-import static com.example.skye.friendsup.Controllers.TimePickerFragment.tminu;
+
+
 
 public class EditMeetingActivity extends AppCompatActivity {
 
@@ -35,8 +35,8 @@ public class EditMeetingActivity extends AppCompatActivity {
     private EditText etLocation;
 
 
-    private int hour = thour;
-    private int minu = tminu;
+//    private int minu = tminu;
+//    private int hour = thour;
 
 
 
@@ -92,21 +92,21 @@ public class EditMeetingActivity extends AppCompatActivity {
 
 
         EditText dateText1 = (EditText)findViewById(R.id.startText2);
-        dateText1.setText(thour+":"+tminu);
-
-        android.app.DialogFragment newFragment = new TimePickerFragment();
-        newFragment.show(getFragmentManager(), "timePickFragment");
-
-        hour = thour;
-        minu = tminu;
-
-        dateText1.setText(hour+":"+minu);
-        startTime.set(Calendar.YEAR,Calendar.MONTH,Calendar.DATE,hour,minu);
-
-
-
-        Log.i(TAG,"The Time is "+startTime.get(Calendar.DAY_OF_MONTH)+"/"+startTime.get(Calendar.MONTH)+"/"+startTime.get(Calendar.YEAR)+
-                "\n"+startTime.get(Calendar.HOUR_OF_DAY)+":"+startTime.get(Calendar.MINUTE));
+//        dateText1.setText(thour+":"+tminu);
+//
+//        android.app.DialogFragment newFragment = new TimePickerFragment();
+//        newFragment.show(getFragmentManager(), "timePickFragment");
+//
+//        hour = thour;
+//        minu = tminu;
+//
+//        dateText1.setText(hour+":"+minu);
+//        startTime.set(Calendar.YEAR,Calendar.MONTH,Calendar.DATE,hour,minu);
+//
+//
+//
+//        Log.i(TAG,"The Time is "+startTime.get(Calendar.DAY_OF_MONTH)+"/"+startTime.get(Calendar.MONTH)+"/"+startTime.get(Calendar.YEAR)+
+//                "\n"+startTime.get(Calendar.HOUR_OF_DAY)+":"+startTime.get(Calendar.MINUTE));
     }
 
 
@@ -116,16 +116,16 @@ public class EditMeetingActivity extends AppCompatActivity {
 
 
 
-        hour = thour;
-        minu = tminu;
-
-        dateText1.setText(hour+":"+minu);
-        startTime.set(Calendar.YEAR,Calendar.MONTH,Calendar.DATE,hour,minu);
-
-
-
-        Log.i(TAG,"The Time is "+startTime.get(Calendar.DAY_OF_MONTH)+"/"+startTime.get(Calendar.MONTH)+"/"+startTime.get(Calendar.YEAR)+
-                "\n"+startTime.get(Calendar.HOUR_OF_DAY)+":"+startTime.get(Calendar.MINUTE));
+//        hour = thour;
+//        minu = tminu;
+//
+//        dateText1.setText(hour+":"+minu);
+//        startTime.set(Calendar.YEAR,Calendar.MONTH,Calendar.DATE,hour,minu);
+//
+//
+//
+//        Log.i(TAG,"The Time is "+startTime.get(Calendar.DAY_OF_MONTH)+"/"+startTime.get(Calendar.MONTH)+"/"+startTime.get(Calendar.YEAR)+
+//                "\n"+startTime.get(Calendar.HOUR_OF_DAY)+":"+startTime.get(Calendar.MINUTE));
 
     }
 
@@ -134,22 +134,22 @@ public class EditMeetingActivity extends AppCompatActivity {
     public void pickTime2(View view){
 
 
-        EditText dateText2 = (EditText)findViewById(R.id.endText2);
-        dateText2.setText(thour+":"+tminu);
-
-        android.app.DialogFragment newFragment = new TimePickerFragment();
-        newFragment.show(getFragmentManager(), "timePickFragment");
-
-        hour = thour;
-        minu = tminu;
-
-        dateText2.setText(hour+":"+minu);
-        endTime.set(Calendar.YEAR,Calendar.MONTH,Calendar.DATE,hour,minu);
-
-
-
-        Log.i(TAG,"The Time is "+endTime.get(Calendar.DAY_OF_MONTH)+"/"+endTime.get(Calendar.MONTH)+"/"+endTime.get(Calendar.YEAR)+
-                "\n"+endTime.get(Calendar.HOUR_OF_DAY)+":"+endTime.get(Calendar.MINUTE));
+//        EditText dateText2 = (EditText)findViewById(R.id.endText2);
+//        dateText2.setText(thour+":"+tminu);
+//
+//        android.app.DialogFragment newFragment = new TimePickerFragment();
+//        newFragment.show(getFragmentManager(), "timePickFragment");
+//
+//        hour = thour;
+//        minu = tminu;
+//
+//        dateText2.setText(hour+":"+minu);
+//        endTime.set(Calendar.YEAR,Calendar.MONTH,Calendar.DATE,hour,minu);
+//
+//
+//
+//        Log.i(TAG,"The Time is "+endTime.get(Calendar.DAY_OF_MONTH)+"/"+endTime.get(Calendar.MONTH)+"/"+endTime.get(Calendar.YEAR)+
+//                "\n"+endTime.get(Calendar.HOUR_OF_DAY)+":"+endTime.get(Calendar.MINUTE));
     }
 
 
@@ -159,16 +159,16 @@ public class EditMeetingActivity extends AppCompatActivity {
 
 
 
-        hour = thour;
-        minu = tminu;
-
-        dateText2.setText(hour+":"+minu);
-        endTime.set(Calendar.YEAR,Calendar.MONTH,Calendar.DATE,hour,minu);
-
-
-
-        Log.i(TAG,"The Time is "+endTime.get(Calendar.DAY_OF_MONTH)+"/"+endTime.get(Calendar.MONTH)+"/"+endTime.get(Calendar.YEAR)+
-                "\n"+endTime.get(Calendar.HOUR_OF_DAY)+":"+endTime.get(Calendar.MINUTE));
+//        hour = thour;
+//        minu = tminu;
+//
+//        dateText2.setText(hour+":"+minu);
+//        endTime.set(Calendar.YEAR,Calendar.MONTH,Calendar.DATE,hour,minu);
+//
+//
+//
+//        Log.i(TAG,"The Time is "+endTime.get(Calendar.DAY_OF_MONTH)+"/"+endTime.get(Calendar.MONTH)+"/"+endTime.get(Calendar.YEAR)+
+//                "\n"+endTime.get(Calendar.HOUR_OF_DAY)+":"+endTime.get(Calendar.MINUTE));
 
     }
 
