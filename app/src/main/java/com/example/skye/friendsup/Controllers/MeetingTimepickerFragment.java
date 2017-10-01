@@ -12,22 +12,28 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.skye.friendsup.R;
+import com.example.skye.friendsup.utils.DateFormatter;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import static com.example.skye.friendsup.R.id.startText;
 
 public class MeetingTimepickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
     public static final String TAG = "Picker status";
     private String timeLabel = "";
-    private String date = "";
+    private int year;
+    private int month;
+    private int day;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the current date as the default date in the picker
         Bundle bundle = this.getArguments();
         timeLabel = bundle.getString("timeLabel");
-        date = bundle.getString("date");
+        year = bundle.getInt("year");
+        month = bundle.getInt("month");
+        day = bundle.getInt("day");
         // Create a new instance of DatePickerDialog and return it
         final Calendar c = Calendar.getInstance();
         int hour = c.get(Calendar.HOUR_OF_DAY);
@@ -39,18 +45,18 @@ public class MeetingTimepickerFragment extends DialogFragment implements TimePic
     }
 
     @Override
-    public void onTimeSet(TimePicker timePicker, int i, int i1) {
-        String time = "" + i + i1;
+    public void onTimeSet(TimePicker timePicker, int hour, int min) {
+
         EditText text = null;
+        Date date = DateFormatter.getDate(year,month,day,hour,min);
         if(timeLabel.equals("startTime")){
             text =  (EditText) getActivity().findViewById(startText);
         }
 
         if(timeLabel.equals("endTime")){
-
             text = (EditText) getActivity().findViewById(R.id.endText);
         }
 
-        text.setText(date + time);
+        text.setText(DateFormatter.formatDateWithTime(date));
     }
 }

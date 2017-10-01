@@ -36,36 +36,17 @@ public class MeetingDatePickerFragment extends DialogFragment implements DatePic
 
     @Override
     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-        if(timeLabel.equals("startTime")){
-            Toast.makeText(getActivity(), timeLabel, Toast.LENGTH_SHORT).show();
-            String startDate = "" + i + i1 + i2;
-            final Calendar c = Calendar.getInstance();
-            int hour = c.get(Calendar.HOUR_OF_DAY);
-            int minute = c.get(Calendar.MINUTE);
+        final Calendar c = Calendar.getInstance();
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+        int minute = c.get(Calendar.MINUTE);
 
-            DialogFragment mf = new MeetingTimepickerFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString("timeLabel", "startTime");
-            bundle.putString("date", startDate);
-            mf.setArguments(bundle);
-            mf.show(getFragmentManager(), "datetimePickFragment");
-        }
-
-        if(timeLabel.equals("endTime")){
-            Toast.makeText(getActivity(), timeLabel, Toast.LENGTH_SHORT).show();
-
-            final Calendar c = Calendar.getInstance();
-            int hour = c.get(Calendar.HOUR_OF_DAY);
-            int minute = c.get(Calendar.MINUTE);
-
-            String endDate = "" + i + i1 + i2 ;
-            DialogFragment mf = new MeetingTimepickerFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString("timeLabel", "endTime");
-            bundle.putString("date", endDate);
-            mf.setArguments(bundle);
-            mf.show(getFragmentManager(), "datetimePickFragment");
-
-        }
+        DialogFragment mf = new MeetingTimepickerFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("timeLabel", timeLabel);
+        bundle.putInt("year", i);
+        bundle.putInt("month",i1);
+        bundle.putInt("day",i2);
+        mf.setArguments(bundle);
+        mf.show(getFragmentManager(), "datetimePickFragment");
     }
 }

@@ -25,6 +25,7 @@ import com.example.skye.friendsup.Models.Friend;
 import com.example.skye.friendsup.Models.Friends;
 import com.example.skye.friendsup.Models.Model;
 import com.example.skye.friendsup.R;
+import com.example.skye.friendsup.utils.DateFormatter;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -107,8 +108,9 @@ public class AddFriendActivity extends AppCompatActivity implements DatePickerDi
                 Toast.makeText(this, "Please fill all blanks", Toast.LENGTH_SHORT).show();
             }
             else{
-                SimpleDateFormat sdf = new SimpleDateFormat("d/m/yyyy");
-                long dob = sdf.parse(dobString).getTime();
+//                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+//                long dob = sdf.parse(dobString).getTime();
+                long dob = DateFormatter.parseDate(dobString);
                 Friend friend = new Friend(name,email,dob);
                 dbHelper.addFriend(friend);
                 Intent intent = new Intent();
@@ -252,9 +254,7 @@ public class AddFriendActivity extends AppCompatActivity implements DatePickerDi
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        String dateString = sdf.format(calendar.getTime());
-        dobText.setText(dateString);
+        dobText.setText(DateFormatter.formatDate(calendar.getTime()));
     }
 
 
