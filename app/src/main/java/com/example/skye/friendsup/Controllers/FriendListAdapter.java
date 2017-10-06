@@ -59,7 +59,7 @@ public class FriendListAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         holder.friendName.setText("Name: " + friendArrayList.get(position).getName());
-        holder.friendEmail.setText("Email " + friendArrayList.get(position).getEmail());
+        holder.friendEmail.setText("Email: " + friendArrayList.get(position).getEmail());
         return convertView;
     }
 

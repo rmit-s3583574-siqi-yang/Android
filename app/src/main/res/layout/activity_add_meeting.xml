@@ -91,11 +91,10 @@
             android:id="@+id/addMeeting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
 
-            android:text="@string/add" />
+            android:text="@string/add"
+            android:layout_below="@+id/locationText"
+            android:layout_centerHorizontal="true" />
 
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

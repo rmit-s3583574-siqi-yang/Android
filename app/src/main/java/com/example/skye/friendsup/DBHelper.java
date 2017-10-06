@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.example.skye.friendsup.Models.Friend;
 import com.example.skye.friendsup.Models.Friends;
@@ -30,6 +31,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public DBHelper(Context context) {
+
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -38,6 +40,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(Friend.CREATE_STATEMENT);
         db.execSQL(Meeting.CREATE_STATEMENT);
         db.execSQL(MeetingFriend.CREATE_STATEMENT);
+        Log.i("Helper status",MeetingFriend.CREATE_STATEMENT);
     }
 
     @Override
@@ -78,7 +81,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         values.put(Meeting.COLUMN_LOCATION, m.getLocation());
 
-        db.insert(Friend.TABLE_NAME, null, values);
+        db.insert(Meeting.TABLE_NAME, null, values);
 
         db.close();
 
@@ -152,6 +155,55 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
+    public Boolean checkEmpty(String tableName){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT count(*) FROM " + tableName, null);
+        cursor.moveToFirst();
+        int icount = cursor.getInt(0);
+        if(icount>0) {
+            return false;
+        }else return true;
+
+    }
+
+    public Boolean checkFriendInMeeting(Friend f){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT count(*) FROM " + Friend.TABLE_NAME + " WHERE " + MeetingFriend.COLUMN_FRIEND_ID + " = "
+                + f.getId(), null);
+        cursor.moveToFirst();
+        int icount = cursor.getInt(0);
+        if(icount>0) {
+            return true;
+        }else return false;
+    }
+
+//    public Friend findFriendFromMeeting(Friend f){
+//        SQLiteDatabase db = this.getWritableDatabase();
+//
+//        HashMap<Integer, Friend> friendsData = getAllMappedFriends();
+//        Friend resultF = null;
+//        long friendId = f.
+//
+//        Cursor cursor = db.rawQuery("SELECT * FROM " + MeetingFriend.TABLE_NAME + " WHERE " + MeetingFriend.COLUMN_FRIEND_ID + " = "
+//                + f.getId(), null);
+//
+//        if (cursor.moveToFirst()) {
+//            do {
+//                if (long friendId = cursor.getInt(0)){
+//
+//                };
+//                resultF = friendsData.get(friendId);
+//            } while (cursor.moveToNext());
+//        }
+//        cursor.close();
+//        db.close();
+//
+//        return resultF;
+//
+//    }
+
     public Friend getFriendById(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + Friend.TABLE_NAME + " WHERE " + Friend.COLUMN_ID + " = "
@@ -186,9 +238,12 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void removeFriend(Friend f) {
         SQLiteDatabase db = this.getWritableDatabase();
+        Log.i("version status",""+ db.getVersion());
 
-        db.delete(MeetingFriend.TABLE_NAME, MeetingFriend.COLUMN_FRIEND_ID + " = ?",
-                new String[]{String.valueOf(f.getId())});
+        //if (checkEmpty(MeetingFriend.TABLE_NAME) == false && checkFriendInMeeting(f) == true) {
+            db.delete(MeetingFriend.TABLE_NAME, MeetingFriend.COLUMN_FRIEND_ID + " = ?",
+                    new String[]{String.valueOf(f.getId())});
+        //}
 
         db.delete(Friend.TABLE_NAME, Friend.COLUMN_ID + " = ?",
                 new String[]{String.valueOf(f.getId())});

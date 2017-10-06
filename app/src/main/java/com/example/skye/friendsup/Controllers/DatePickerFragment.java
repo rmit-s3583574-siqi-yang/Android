@@ -21,11 +21,7 @@ import java.util.Date;
 public class DatePickerFragment extends DialogFragment {
 
     public static final String TAG = "Picker status";
-    // todo:  no need to use this, need to be deleted
-    public static int tyear = 2100;
-    public static int tmonth = 6;
-    public static int tday = 15;
-    public static boolean datePicked = false;
+
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

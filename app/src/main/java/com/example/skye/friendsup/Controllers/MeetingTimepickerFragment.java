@@ -40,7 +40,7 @@ public class MeetingTimepickerFragment extends DialogFragment implements TimePic
         int minute = c.get(Calendar.MINUTE);
 
         // Create a new instance of TimePickerDialog and return it
-        return new TimePickerDialog(getActivity(), this, hour, minute,
+        return new TimePickerDialog(getActivity(),android.R.style.Theme_Holo_Dialog, this, hour, minute,
                 DateFormat.is24HourFormat(getActivity()));
     }
 

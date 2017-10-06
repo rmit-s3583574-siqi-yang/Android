@@ -68,6 +68,7 @@ public class AddFriendActivity extends AppCompatActivity implements DatePickerDi
         addFriendBtn.setOnClickListener(addFriendActivityListener);
         addFromContact.setOnClickListener(addFriendActivityListener);
         dobText.setOnClickListener(addFriendActivityListener);
+
         dobText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
@@ -86,6 +87,7 @@ public class AddFriendActivity extends AppCompatActivity implements DatePickerDi
            switch (v.getId()){
                case R.id.dobText:
                    pickDate();
+                   break;
                case R.id.addFriendButton:
                    addFriend();
                    break;
@@ -111,6 +113,7 @@ public class AddFriendActivity extends AppCompatActivity implements DatePickerDi
 //                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 //                long dob = sdf.parse(dobString).getTime();
                 long dob = DateFormatter.parseDate(dobString);
+
                 Friend friend = new Friend(name,email,dob);
                 dbHelper.addFriend(friend);
                 Intent intent = new Intent();
@@ -255,6 +258,7 @@ public class AddFriendActivity extends AppCompatActivity implements DatePickerDi
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day);
         dobText.setText(DateFormatter.formatDate(calendar.getTime()));
+
     }
 
 

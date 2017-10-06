@@ -6,7 +6,11 @@ public class MeetingFriend {
     public static final String TABLE_NAME = "meeting_friends";
     public static final String COLUMN_MEETING_ID = "meeting_id";
     public static final String COLUMN_FRIEND_ID = "friend_id";
-    public static final String CREATE_STATEMENT = "CREATE TABLE " + TABLE_NAME + "(" + COLUMN_FRIEND_ID + " INTEGER NOT NULL, " + COLUMN_MEETING_ID + " INTEGER NOT NULL, " + "PRIMARY KEY (" + COLUMN_MEETING_ID + ", " + COLUMN_FRIEND_ID + "))";
+    public static final String CREATE_STATEMENT =
+            "CREATE TABLE " + TABLE_NAME + "(" +
+                    COLUMN_FRIEND_ID + " INTEGER NOT NULL, " +
+                    COLUMN_MEETING_ID + " INTEGER NOT NULL, " +
+                    "PRIMARY KEY (" + COLUMN_MEETING_ID + ", " + COLUMN_FRIEND_ID + "))";
 
 
     private Friend friend;

@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -14,10 +15,13 @@ import com.example.skye.friendsup.R;
 
 import static com.example.skye.friendsup.Controllers.MainActivity.model;
 
-public class MeetingActivity extends AppCompatActivity {
+public class MeetingActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener{
 
     public static final String TAG = "Meetings status";
     public static int meetingPicked = 0;
+
+    private Button showMap;
+    private Button addNewM;
 
     private int sizeoMeetings = model.getMeetings().size();
 
@@ -27,6 +31,12 @@ public class MeetingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meeting);
+
+        showMap = (Button) findViewById(R.id.showMap);
+        addNewM = (Button) findViewById(R.id.addNewM);
+
+        showMap.setOnClickListener(meetingActivityListener);
+        addNewM.setOnClickListener(meetingActivityListener);
 
         try{
 
@@ -59,11 +69,28 @@ public class MeetingActivity extends AppCompatActivity {
 
 
 
-    public void addNewM(View view){
-        Intent intentMeetings = new Intent(getApplicationContext(), AddMeetingActivity.class);
-        startActivity(intentMeetings);
 
-    }
+
+
+
+    private View.OnClickListener meetingActivityListener = new View.OnClickListener() {
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.showMap:
+                    Intent intentMap = new Intent(getApplicationContext(), MapsActivity.class);
+                    startActivity(intentMap);
+                    break;
+                case R.id.addNewM:
+                    Intent intentMeetings = new Intent(getApplicationContext(), AddMeetingActivity.class);
+                    startActivity(intentMeetings);
+                    break;
+
+                default:
+                    break;
+            }
+
+        }
+    };
 
     @Override
     protected void onResume() {
@@ -127,4 +154,13 @@ public class MeetingActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+        return false;
+    }
 }

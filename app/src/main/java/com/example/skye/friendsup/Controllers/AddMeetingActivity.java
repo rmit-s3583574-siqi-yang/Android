@@ -1,6 +1,12 @@
 package com.example.skye.friendsup.Controllers;
 
+import android.Manifest;
 import android.app.DialogFragment;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,10 +15,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.skye.friendsup.DBHelper;
 import com.example.skye.friendsup.Models.Friends;
+import com.example.skye.friendsup.Models.Meeting;
 import com.example.skye.friendsup.Models.Meetings;
 import com.example.skye.friendsup.R;
+import com.example.skye.friendsup.utils.DateFormatter;
+import com.example.skye.friendsup.utils.MyLocation;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -22,6 +33,8 @@ import static com.example.skye.friendsup.Controllers.MainActivity.model;
 public class AddMeetingActivity extends AppCompatActivity {
 
     public static final String TAG = "AddMeeting status";
+    protected static final int PICK_CONTACTS = 100;
+    protected static final int MY_PERMISSIONS_REQUEST_LOCATION = 0 ;
 
 
     private String title;
@@ -39,8 +52,11 @@ public class AddMeetingActivity extends AppCompatActivity {
     Meetings newMeeting;
     ////////
     private Button addMeetingBtn;
+    private EditText titleText;
     private EditText startTimeText;
     private EditText endTimeText;
+    private EditText locationText;
+    private DBHelper dbHelper;
 
 
     @Override
@@ -48,13 +64,29 @@ public class AddMeetingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_meeting);
         Log.i(TAG, "onCreateAddMeeting");
+
         addMeetingBtn = (Button) findViewById(R.id.addMeeting);
+        titleText = (EditText) findViewById(R.id.titleText);
         startTimeText = (EditText) findViewById(R.id.startText);
         endTimeText = (EditText) findViewById(R.id.endText);
+        locationText = (EditText) findViewById(R.id.locationText);
 
+        dbHelper = new DBHelper(getApplicationContext());
+
+        addMeetingBtn.setOnClickListener(addMeetingActivityListener);
+        titleText.setOnClickListener(addMeetingActivityListener);
         startTimeText.setOnClickListener(addMeetingActivityListener);
         endTimeText.setOnClickListener(addMeetingActivityListener);
+        locationText.setOnClickListener(addMeetingActivityListener);
 
+//        LocationResult locationResult = new LocationResult(){
+//            @Override
+//            public void gotLocation(Location location){
+//                //Got the location!
+//            }
+//        };
+//        MyLocation myLocation = new MyLocation();
+//        myLocation.getLocation(this, locationResult);
 
         startTimeText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -74,6 +106,16 @@ public class AddMeetingActivity extends AppCompatActivity {
 
             }
         });
+
+        locationText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(b){
+                    askForLocationPermission();
+                }
+
+            }
+        });
     }
 
     // Create an anonymous implementation of OnClickListener
@@ -89,12 +131,81 @@ public class AddMeetingActivity extends AppCompatActivity {
                 case R.id.addMeeting:
                     addMeeting();
                     break;
+
+                case R.id.locationText:
+                    askForLocationPermission();
+                    break;
                 default:
                     break;
             }
 
         }
     };
+
+    public void askForLocationPermission(){
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(AddMeetingActivity.this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(AddMeetingActivity.this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(AddMeetingActivity.this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_LOCATION);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }else
+            //TODO get real location
+            locationText.setText("-37.808148,144.962692");
+
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    Log.i(TAG,"Permission granted");
+
+                    //TODO get real location
+                    locationText.setText("-37.808148,144.962692");
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+                    Toast.makeText(AddMeetingActivity.this, "Permission denied to get location", Toast.LENGTH_LONG).show();
+                    Log.i(TAG,"Permission declined");
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
 
     private void pickTime(String label) {
         DialogFragment mf = new MeetingDatePickerFragment();
@@ -106,34 +217,60 @@ public class AddMeetingActivity extends AppCompatActivity {
 
 
     private void addMeeting() {
+        try {
 
-    }
+            String title = titleText.getText().toString().trim();
+            String startTime = startTimeText.getText().toString().trim();
+            String endTime = endTimeText.getText().toString().trim();
+            String location = locationText.getText().toString().trim();
 
+            if(title.isEmpty() || startTime.isEmpty() || endTime.isEmpty() || location.isEmpty()){
+                Toast.makeText(this, "Please fill all blanks", Toast.LENGTH_SHORT).show();
+            }
+            else{
 
-    public void addNewMeeting(View view) {
+                long sTime = DateFormatter.parseDateWithTime(startTime);
+                long eTime = DateFormatter.parseDateWithTime(endTime);
 
-        friendsMeeting.add(model.getFriends().get(0));
+                Meeting meeting = new Meeting(title,sTime,eTime,location);
+                dbHelper.addMeeting(meeting);
+                Intent intent = new Intent();
+                setResult(RESULT_OK, intent);
+                finish();
 
-        EditText etTitle = (EditText) findViewById(R.id.titleText);
-        EditText etLocation = (EditText) findViewById(R.id.locationText);
+            }
 
-        title = etTitle.getText().toString();
-        location = etLocation.getText().toString();
-
-
-        if (title != null && startPicked != false && endPicked != false && location != null) {
-
-            newMeeting = new Meetings(title, startTime, endTime, friendsMeeting, location);
-            model.addNewMeeting(newMeeting);
-
-            Toast.makeText(AddMeetingActivity.this, "New meeting added", Toast.LENGTH_LONG).show();
-            finish();
-        } else {
-            Toast.makeText(AddMeetingActivity.this, "You have to fill all the space.", Toast.LENGTH_LONG).show();
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
 
-
     }
+
+
+//    public void addNewMeeting(View view) {
+//
+//        friendsMeeting.add(model.getFriends().get(0));
+//
+//        EditText etTitle = (EditText) findViewById(R.id.titleText);
+//        EditText etLocation = (EditText) findViewById(R.id.locationText);
+//
+//        title = etTitle.getText().toString();
+//        location = etLocation.getText().toString();
+//
+//
+//        if (title != null && startPicked != false && endPicked != false && location != null) {
+//
+//            newMeeting = new Meetings(title, startTime, endTime, friendsMeeting, location);
+//            model.addNewMeeting(newMeeting);
+//
+//            Toast.makeText(AddMeetingActivity.this, "New meeting added", Toast.LENGTH_LONG).show();
+//            finish();
+//        } else {
+//            Toast.makeText(AddMeetingActivity.this, "You have to fill all the space.", Toast.LENGTH_LONG).show();
+//        }
+//
+//
+//    }
 
 
 //    public void pickDate1(View view){

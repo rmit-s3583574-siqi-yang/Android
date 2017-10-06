@@ -20,6 +20,8 @@ import android.widget.Toast;
 import com.example.skye.friendsup.DBHelper;
 import com.example.skye.friendsup.Models.DataNotNull;
 import com.example.skye.friendsup.Models.Friend;
+import com.example.skye.friendsup.Models.Meeting;
+import com.example.skye.friendsup.Models.MeetingFriend;
 import com.example.skye.friendsup.Models.Model;
 import com.example.skye.friendsup.NetworkStateService;
 import com.example.skye.friendsup.R;
@@ -46,6 +48,10 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.i(TAG,"onCreateFriends");
+
+        Log.i("Helper status", MeetingFriend.CREATE_STATEMENT);
+        Log.i("Helper status",Friend.CREATE_STATEMENT);
+        Log.i("Helper status", Meeting.TABLE_NAME);
 
         Intent network=new Intent(this,NetworkStateService.class);
         startService(network);
@@ -75,6 +81,7 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
     public void gotoMeeting(View view){
         Intent intentGoMeetings = new Intent(getApplicationContext(), MeetingActivity.class);
         startActivity(intentGoMeetings);
+
     }
 
     @Override
@@ -145,7 +152,7 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
         final int finalPosition = i;
         AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
         alertDialog.setTitle("Remove Friend?");
-        alertDialog.setMessage("IAre you sure you wish to remove this friend?");
+        alertDialog.setMessage("Are you sure to remove this friend?");
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "YES",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -163,6 +170,7 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
                         dialog.dismiss();
                     }
                 });
+
         alertDialog.show();
         return true;
     }

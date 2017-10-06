@@ -31,7 +31,7 @@ public class MeetingDatePickerFragment extends DialogFragment implements DatePic
         int day = c.get(Calendar.DAY_OF_MONTH);
 
         // Create a new instance of DatePickerDialog and return it
-        return new DatePickerDialog(getActivity(), this, year, month, day);
+        return new DatePickerDialog(getActivity(), android.R.style.Theme_Holo_Dialog,this, year, month, day);
     }
 
     @Override
