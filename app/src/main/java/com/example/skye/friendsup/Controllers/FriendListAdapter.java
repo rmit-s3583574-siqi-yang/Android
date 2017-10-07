@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.skye.friendsup.Models.Friend;
@@ -58,8 +57,8 @@ public class FriendListAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.friendName.setText("Name: " + friendArrayList.get(position).getName());
-        holder.friendEmail.setText("Email: " + friendArrayList.get(position).getEmail());
+        holder.friendName.setText(" " + friendArrayList.get(position).getName());
+        holder.friendEmail.setText("   " + friendArrayList.get(position).getEmail());
         return convertView;
     }
 

@@ -1,4 +1,4 @@
-package com.example.skye.friendsup.Controllers;
+package com.example.skye.friendsup.View;
 
 // dummy friend location provider by Caspar for MAD s2, 2017
 // Usage: add this class to project in appropriate package

@@ -1,4 +1,4 @@
-package com.example.skye.friendsup;
+package com.example.skye.friendsup.utils;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -9,10 +9,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.widget.Toast;
-
-import com.example.skye.friendsup.Controllers.MainActivity;
 
 
 public class NetworkStateService extends Service {

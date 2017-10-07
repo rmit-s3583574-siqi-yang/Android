@@ -1,6 +1,5 @@
-package com.example.skye.friendsup.Controllers;
+package com.example.skye.friendsup.Activity;
 
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;

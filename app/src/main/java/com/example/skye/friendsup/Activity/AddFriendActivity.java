@@ -1,4 +1,4 @@
-package com.example.skye.friendsup.Controllers;
+package com.example.skye.friendsup.Activity;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
@@ -20,19 +20,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.skye.friendsup.DBHelper;
+import com.example.skye.friendsup.View.ContactDataManager;
+import com.example.skye.friendsup.utils.DBHelper;
 import com.example.skye.friendsup.Models.Friend;
-import com.example.skye.friendsup.Models.Friends;
-import com.example.skye.friendsup.Models.Model;
 import com.example.skye.friendsup.R;
 import com.example.skye.friendsup.utils.DateFormatter;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 
 public class AddFriendActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
@@ -110,10 +105,7 @@ public class AddFriendActivity extends AppCompatActivity implements DatePickerDi
                 Toast.makeText(this, "Please fill all blanks", Toast.LENGTH_SHORT).show();
             }
             else{
-//                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-//                long dob = sdf.parse(dobString).getTime();
                 long dob = DateFormatter.parseDate(dobString);
-
                 Friend friend = new Friend(name,email,dob);
                 dbHelper.addFriend(friend);
                 Intent intent = new Intent();

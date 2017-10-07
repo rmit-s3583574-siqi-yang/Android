@@ -1,10 +1,9 @@
-package com.example.skye.friendsup.Controllers;
+package com.example.skye.friendsup.Activity;
 
 import android.Manifest;
 import android.app.DialogFragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -15,19 +14,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.skye.friendsup.DBHelper;
-import com.example.skye.friendsup.Models.Friends;
+import com.example.skye.friendsup.utils.DBHelper;
 import com.example.skye.friendsup.Models.Meeting;
-import com.example.skye.friendsup.Models.Meetings;
 import com.example.skye.friendsup.R;
 import com.example.skye.friendsup.utils.DateFormatter;
-import com.example.skye.friendsup.utils.MyLocation;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Calendar;
-
-import static com.example.skye.friendsup.Controllers.MainActivity.model;
 
 
 public class AddMeetingActivity extends AppCompatActivity {
@@ -37,19 +29,6 @@ public class AddMeetingActivity extends AppCompatActivity {
     protected static final int MY_PERMISSIONS_REQUEST_LOCATION = 0 ;
 
 
-    private String title;
-    private Calendar startTime = Calendar.getInstance();
-    private boolean startPicked = false;
-    private Calendar endTime = Calendar.getInstance();
-    private boolean endPicked = false;
-    private ArrayList<Friends> friendsMeeting = new ArrayList<>();
-    private String location;
-
-
-    // private int hour = thour;
-    // private int minu = tminu;
-
-    Meetings newMeeting;
     ////////
     private Button addMeetingBtn;
     private EditText titleText;

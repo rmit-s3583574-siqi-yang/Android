@@ -1,35 +1,23 @@
-package com.example.skye.friendsup.Controllers;
+package com.example.skye.friendsup.Activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.skye.friendsup.DBHelper;
-import com.example.skye.friendsup.Models.DataNotNull;
+import com.example.skye.friendsup.Controllers.FriendListAdapter;
+import com.example.skye.friendsup.utils.DBHelper;
 import com.example.skye.friendsup.Models.Friend;
-import com.example.skye.friendsup.Models.Meeting;
-import com.example.skye.friendsup.Models.MeetingFriend;
-import com.example.skye.friendsup.Models.Model;
-import com.example.skye.friendsup.NetworkStateService;
+import com.example.skye.friendsup.utils.NetworkStateService;
 import com.example.skye.friendsup.R;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import static com.example.skye.friendsup.R.id.friendList;
 
 public class MainActivity extends AppCompatActivity  implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener{
 
@@ -37,8 +25,7 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
     private ArrayList<Friend> friendsList;
     private FriendListAdapter friendListAdapter;
     private DBHelper dbHelper;
-    public static Model model = new Model();
-    public static int friendPicked = 0;
+
     private static final int ADD_FRIEND_REQUEST = 1;
     private static final int EDIT_FRIEND_REQUEST = 2;
 
@@ -49,14 +36,11 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
         setContentView(R.layout.activity_main);
         Log.i(TAG,"onCreateFriends");
 
-        Log.i("Helper status", MeetingFriend.CREATE_STATEMENT);
-        Log.i("Helper status",Friend.CREATE_STATEMENT);
-        Log.i("Helper status", Meeting.TABLE_NAME);
 
         Intent network=new Intent(this,NetworkStateService.class);
         startService(network);
 
-        ListView friendsListView = (ListView) findViewById(friendList);
+        ListView friendsListView = (ListView) findViewById(R.id.friendList);
         TextView emptyText = (TextView)findViewById(R.id.emptyFriendList);
         friendsListView.setEmptyView(emptyText);
 

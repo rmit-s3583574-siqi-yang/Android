@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.skye.friendsup.Controllers.EditMeetingActivity">
+    tools:context="com.example.skye.friendsup.Activity.EditMeetingActivity">
 
     <RelativeLayout
         android:layout_width="344dp"
@@ -19,7 +19,7 @@
         android:layout_marginBottom="8dp">
 
         <Button
-            android:id="@+id/addMeetingB2"
+            android:id="@+id/addMeeting2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -28,50 +28,30 @@
             android:onClick="editMeeting"
             android:text="@string/save" />
 
-        <Button
-            android:id="@+id/addEndB2"
-            android:layout_width="@android:dimen/notification_large_icon_height"
-            android:layout_height="@android:dimen/app_icon_size"
-            android:layout_above="@+id/locationText2"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:onClick="pickTime2"
-            android:text="@string/add" />
-
-        <Button
-            android:id="@+id/addStartB2"
-            android:layout_width="@android:dimen/notification_large_icon_height"
-            android:layout_height="@android:dimen/app_icon_size"
-            android:layout_above="@+id/endText2"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:onClick="pickTime1"
-            android:text="@string/add" />
-
         <EditText
             android:id="@+id/locationText2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/endText2"
-            android:layout_alignStart="@+id/endText2"
-            android:layout_below="@+id/endText2"
+            android:layout_alignLeft="@+id/endText"
+            android:layout_alignStart="@+id/endText"
+            android:layout_below="@+id/endText"
             android:ems="10"
             android:hint="@string/location"
             android:inputType="textPersonName" />
         <EditText
-            android:id="@+id/endText2"
+            android:id="@+id/endText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/startText2"
-            android:layout_alignStart="@+id/startText2"
-            android:layout_below="@+id/startText2"
+            android:layout_alignLeft="@+id/startText"
+            android:layout_alignStart="@+id/startText"
+            android:layout_below="@+id/startText"
             android:ems="10"
             android:hint="@string/endT"
             android:inputType="date"
             android:onClick="refreshT2" />
 
         <EditText
-            android:id="@+id/startText2"
+            android:id="@+id/startText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/titleText2"

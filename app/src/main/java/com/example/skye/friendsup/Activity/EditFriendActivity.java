@@ -1,4 +1,4 @@
-package com.example.skye.friendsup.Controllers;
+package com.example.skye.friendsup.Activity;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
@@ -19,17 +19,14 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.skye.friendsup.DBHelper;
+import com.example.skye.friendsup.View.ContactDataManager;
+import com.example.skye.friendsup.utils.DBHelper;
 import com.example.skye.friendsup.Models.Friend;
 import com.example.skye.friendsup.R;
+import com.example.skye.friendsup.utils.DateFormatter;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
-
-import static com.example.skye.friendsup.R.id.friendName;
 
 public class EditFriendActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
     protected static final int PICK_CONTACTS = 100;
@@ -62,7 +59,7 @@ public class EditFriendActivity extends AppCompatActivity implements DatePickerD
 
     ////////////
     private DBHelper dbHelper;
-    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    //private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     private int editId;
     private Button addFromContact;
     private Button save;
@@ -88,7 +85,7 @@ public class EditFriendActivity extends AppCompatActivity implements DatePickerD
 
         nameText.setText(f.getName());
         emailText.setText(f.getEmail());
-        dateText.setText(sdf.format(f.getBirthday()));
+        dateText.setText(DateFormatter.lngStringDate(f.getBirthday()));
 
 //
 //        friendImg = R.drawable.icon0;
@@ -163,7 +160,7 @@ public class EditFriendActivity extends AppCompatActivity implements DatePickerD
                 Toast.makeText(this, "Please fill all blanks", Toast.LENGTH_SHORT).show();
             }
             else{
-                long dob = sdf.parse(dobString).getTime();
+                long dob = DateFormatter.parseDate(dobString);
                 Friend newFriend = new Friend(name,email,dob);
                 dbHelper.updateFriendById(editId,newFriend);
                 Intent intent = new Intent();
@@ -355,7 +352,7 @@ public class EditFriendActivity extends AppCompatActivity implements DatePickerD
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day);
-        String dateString = sdf.format(calendar.getTime());
+        String dateString = DateFormatter.formatDate(calendar.getTime());
         dateText.setText(dateString);
     }
 

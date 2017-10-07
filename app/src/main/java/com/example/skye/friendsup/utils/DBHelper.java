@@ -1,4 +1,4 @@
-package com.example.skye.friendsup;
+package com.example.skye.friendsup.utils;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,16 +8,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.example.skye.friendsup.Models.Friend;
-import com.example.skye.friendsup.Models.Friends;
 import com.example.skye.friendsup.Models.Meeting;
 import com.example.skye.friendsup.Models.MeetingFriend;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-
-import static android.R.attr.id;
-import static android.os.Build.VERSION_CODES.M;
 
 public class DBHelper extends SQLiteOpenHelper {
 
@@ -110,6 +106,23 @@ public class DBHelper extends SQLiteOpenHelper {
         // Close cursor
         cursor.close();
         return friends;
+    }
+
+    public ArrayList<Meeting> getAllMeetings(){
+        ArrayList<Meeting> meetings = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + Meeting.TABLE_NAME + " ORDER BY " + Meeting.COLUMN_TITLE, null);
+        // Add reminder to hash map for each row result
+        if (cursor.moveToFirst()) {
+            do {
+                Meeting m = new Meeting(cursor.getInt(0), cursor.getString(1), cursor.getLong(2), cursor.getLong(3), cursor.getString(4));
+                meetings.add(m);
+            } while (cursor.moveToNext());
+        }
+        // Close cursor
+        cursor.close();
+        return meetings;
+
     }
 
     public HashMap<Integer, Friend> getAllMappedFriends() {
@@ -228,6 +241,7 @@ public class DBHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(Friend.COLUMN_NAME, newFriend.getName());
         contentValues.put(Friend.COLUMN_EMAIL, newFriend.getEmail());
+        contentValues.put(Friend.COLUMN_BIRTHDAY, newFriend.getBirthday());
         String selection = Friend.COLUMN_ID + " = ?"; // where ID column = rowId (that is, selectionArgs)
         String[] selectionArgs = { String.valueOf(id) };
 
@@ -236,14 +250,48 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    public Meeting getMeetingById(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + Meeting.TABLE_NAME + " WHERE " + Meeting.COLUMN_ID + " = "
+                + id, null);
+
+        Meeting m = null;
+        if (cursor.moveToFirst()) {
+            do {
+                m = new Meeting(cursor.getInt(0), cursor.getString(1), cursor.getLong(2), cursor.getLong(3), cursor.getString(4));
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+
+        return m;
+    }
+
+    public void updateMeetingById(int id, Meeting newMeeting){
+        Meeting m = getMeetingById(id);
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(Meeting.COLUMN_TITLE, newMeeting.getTitle());
+        contentValues.put(Meeting.COLUMN_START_TIME, newMeeting.getStartTime());
+        contentValues.put(Meeting.COLUMN_END_TIME, newMeeting.getEndTime());
+        contentValues.put(Meeting.COLUMN_LOCATION, newMeeting.getLocation());
+        String selection = Meeting.COLUMN_ID + " = ?"; // where ID column = rowId (that is, selectionArgs)
+        String[] selectionArgs = { String.valueOf(id) };
+
+        db.update(Meeting.TABLE_NAME, contentValues, selection,
+                selectionArgs);
+        db.close();
+    }
+
     public void removeFriend(Friend f) {
         SQLiteDatabase db = this.getWritableDatabase();
         Log.i("version status",""+ db.getVersion());
 
-        //if (checkEmpty(MeetingFriend.TABLE_NAME) == false && checkFriendInMeeting(f) == true) {
-            db.delete(MeetingFriend.TABLE_NAME, MeetingFriend.COLUMN_FRIEND_ID + " = ?",
-                    new String[]{String.valueOf(f.getId())});
-        //}
+
+        db.delete(MeetingFriend.TABLE_NAME, MeetingFriend.COLUMN_FRIEND_ID + " = ?",
+                new String[]{String.valueOf(f.getId())});
+
 
         db.delete(Friend.TABLE_NAME, Friend.COLUMN_ID + " = ?",
                 new String[]{String.valueOf(f.getId())});

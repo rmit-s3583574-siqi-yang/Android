@@ -1,4 +1,4 @@
-package com.example.skye.friendsup.Controllers;
+package com.example.skye.friendsup.Activity;
 
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;

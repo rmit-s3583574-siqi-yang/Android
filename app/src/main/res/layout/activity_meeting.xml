@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.skye.friendsup.Controllers.MeetingActivity"
+    tools:context="com.example.skye.friendsup.Activity.MeetingActivity"
     tools:layout_editor_absoluteY="81dp"
     tools:layout_editor_absoluteX="0dp">
 
@@ -41,7 +41,7 @@
             android:text="@string/add" />
 
         <ListView
-            android:id="@+id/listView2"
+            android:id="@+id/meetingList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
@@ -58,4 +58,5 @@
             android:text="@string/title_activity_maps" />
 
     </RelativeLayout>
+
 </android.support.constraint.ConstraintLayout>

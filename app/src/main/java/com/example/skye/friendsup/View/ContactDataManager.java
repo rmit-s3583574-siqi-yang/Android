@@ -1,4 +1,4 @@
-package com.example.skye.friendsup.Controllers;
+package com.example.skye.friendsup.View;
 
 /**
  * Created by skye on 1/9/17.

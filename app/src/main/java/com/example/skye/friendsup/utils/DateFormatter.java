@@ -49,4 +49,13 @@ public class DateFormatter {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         return sdf.parse(dateString).getTime();
     }
+    public static String lngStringDate(long lng){
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return sdf.format(lng);
+    }
+
+    public static String lngStringDateTime(long lng){
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        return sdf.format(lng);
+    }
 }

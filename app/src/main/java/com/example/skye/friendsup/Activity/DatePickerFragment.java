@@ -1,17 +1,11 @@
-package com.example.skye.friendsup.Controllers;
+package com.example.skye.friendsup.Activity;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.IntDef;
-import android.util.Log;
-import android.widget.DatePicker;
-import android.widget.TextView;
 
 import java.util.Calendar;
-import java.util.Date;
 
 
 /**
