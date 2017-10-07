@@ -124,7 +124,7 @@ public class MeetingActivity extends AppCompatActivity implements AdapterView.On
                     startActivity(intentMap);
                     break;
                 case R.id.addNewM:
-                    Intent i = new Intent(getApplicationContext(), AddFriendActivity.class);
+                    Intent i = new Intent(getApplicationContext(), AddMeetingActivity.class);
                     startActivityForResult(i, ADD_MEETING_REQUEST);
                     break;
 

@@ -58,14 +58,7 @@ public class AddMeetingActivity extends AppCompatActivity {
         endTimeText.setOnClickListener(addMeetingActivityListener);
         locationText.setOnClickListener(addMeetingActivityListener);
 
-//        LocationResult locationResult = new LocationResult(){
-//            @Override
-//            public void gotLocation(Location location){
-//                //Got the location!
-//            }
-//        };
-//        MyLocation myLocation = new MyLocation();
-//        myLocation.getLocation(this, locationResult);
+
 
         startTimeText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override

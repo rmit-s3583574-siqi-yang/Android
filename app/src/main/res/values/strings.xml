@@ -22,5 +22,6 @@
     <string name="press_to_pick_date">Press to pick date</string>
     <string name="birthday">Birthday</string>
     <string name="import_from_contact">Import from contact</string>
+    <string name="title_activity_maps2">Map</string>
 
 </resources>
