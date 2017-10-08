@@ -22,7 +22,6 @@ import java.util.ArrayList;
 public class MeetingActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener{
 
     public static final String TAG = "Meetings status";
-    public static int meetingPicked = 0;
 
     private Button showMap;
     private Button addNewM;
@@ -58,36 +57,43 @@ public class MeetingActivity extends AppCompatActivity implements AdapterView.On
         showMap.setOnClickListener(meetingActivityListener);
         addNewM.setOnClickListener(meetingActivityListener);
 
-//        try{
-//
-//            int sizeoMeetings = model.getMeetings().size();
-//            listoMeetings = new String[sizeoMeetings];
-//            for(int i = 0; i < sizeoMeetings; i++){
-//                listoMeetings[i] = model.getMeetings().get(i).getTitle();
-//            }
-//
-//            ListAdapter MeetingsListAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,listoMeetings);
-//            ListView MeetingsListView = (ListView)findViewById(R.id.listView2);
-//            MeetingsListView.setAdapter(MeetingsListAdapter);
-//
-//            MeetingsListView.setOnItemClickListener(
-//                    new AdapterView.OnItemClickListener(){
-//                        @Override
-//                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                            meetingPicked = position;
-//                            Intent intentEditMeetings = new Intent(getApplicationContext(), EditMeetingActivity.class);
-//                            startActivity(intentEditMeetings);
-//                            //String fruit = String.valueOf(parent.getItemAtPosition(position));
-//                        }
-//                    }
-//            );
-//        }catch (Exception e){
-//            Log.e(TAG,e.getMessage());
-//
-//        }
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+        Intent i = new Intent(this, EditMeetingActivity.class);
+        i.putExtra("id",meetingsList.get(position).getId());
+        startActivityForResult(i, EDIT_MEETING_REQUEST);
 
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+        final int finalPosition = i;
+        AlertDialog alertDialog = new AlertDialog.Builder(MeetingActivity.this).create();
+        alertDialog.setTitle("Remove Meeting?");
+        alertDialog.setMessage("Are you sure to remove this meeting?");
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "YES",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Meeting m = meetingsList.get(finalPosition);
+                        dbHelper.removeMeeting(m);
+                        meetingsList = dbHelper.getAllMeetings();
+                        meetingListAdapter.setMeetingArrayList(meetingsList);
+                        meetingListAdapter.notifyDataSetChanged();
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "NO",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+        alertDialog.show();
+        return true;
+    }
 
 
     @Override
@@ -135,16 +141,15 @@ public class MeetingActivity extends AppCompatActivity implements AdapterView.On
         }
     };
 
+
+
+
     @Override
     protected void onResume() {
         super.onResume();
         Log.i(TAG,"onResumeMeetings");
 
-
     }
-
-
-
 
     @Override
     protected void onRestart() {
@@ -170,40 +175,4 @@ public class MeetingActivity extends AppCompatActivity implements AdapterView.On
         Log.i(TAG,"onDestroyMeetings");
     }
 
-
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-        Intent i = new Intent(this, EditMeetingActivity.class);
-        i.putExtra("id",meetingsList.get(position).getId());
-        startActivityForResult(i, EDIT_MEETING_REQUEST);
-
-    }
-
-    @Override
-    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-        final int finalPosition = i;
-        AlertDialog alertDialog = new AlertDialog.Builder(MeetingActivity.this).create();
-        alertDialog.setTitle("Remove Meeting?");
-        alertDialog.setMessage("Are you sure to remove this meeting?");
-        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "YES",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Meeting m = meetingsList.get(finalPosition);
-                        dbHelper.removeMeeting(m);
-                        meetingsList = dbHelper.getAllMeetings();
-                        meetingListAdapter.setMeetingArrayList(meetingsList);
-                        meetingListAdapter.notifyDataSetChanged();
-                        dialog.dismiss();
-                    }
-                });
-        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "NO",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-
-        alertDialog.show();
-        return true;
-    }
 }

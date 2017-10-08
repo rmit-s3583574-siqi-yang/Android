@@ -11,15 +11,17 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp">
+        app:layout_constraintVertical_bias="1.0">
 
         <EditText
             android:id="@+id/titleText"
@@ -41,8 +43,7 @@
             android:layout_below="@+id/titleText"
             android:ems="10"
             android:hint="@string/startT"
-            android:inputType="date"
-             />
+            android:inputType="date" />
 
         <EditText
             android:id="@+id/endText"
@@ -53,8 +54,7 @@
             android:layout_below="@+id/startText"
             android:ems="10"
             android:hint="@string/endT"
-            android:inputType="date"
-            />
+            android:inputType="date" />
 
         <EditText
             android:id="@+id/locationText"
@@ -68,24 +68,24 @@
             android:inputType="textPersonName" />
 
         <!--<Button-->
-            <!--android:id="@+id/addStartB"-->
-            <!--android:layout_width="@android:dimen/notification_large_icon_height"-->
-            <!--android:layout_height="@android:dimen/app_icon_size"-->
-            <!--android:layout_above="@+id/endText"-->
-            <!--android:layout_alignParentEnd="true"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:onClick="pickDate1"-->
-            <!--android:text="@string/add" />-->
+        <!--android:id="@+id/addStartB"-->
+        <!--android:layout_width="@android:dimen/notification_large_icon_height"-->
+        <!--android:layout_height="@android:dimen/app_icon_size"-->
+        <!--android:layout_above="@+id/endText"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:onClick="pickDate1"-->
+        <!--android:text="@string/add" />-->
 
         <!--<Button-->
-            <!--android:id="@+id/addEndB"-->
-            <!--android:layout_width="@android:dimen/notification_large_icon_height"-->
-            <!--android:layout_height="@android:dimen/app_icon_size"-->
-            <!--android:layout_above="@+id/locationText"-->
-            <!--android:layout_alignParentEnd="true"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:onClick="pickDate2"-->
-            <!--android:text="@string/add" />-->
+        <!--android:id="@+id/addEndB"-->
+        <!--android:layout_width="@android:dimen/notification_large_icon_height"-->
+        <!--android:layout_height="@android:dimen/app_icon_size"-->
+        <!--android:layout_above="@+id/locationText"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:onClick="pickDate2"-->
+        <!--android:text="@string/add" />-->
 
         <Button
             android:id="@+id/addMeeting"
@@ -93,8 +93,29 @@
             android:layout_height="wrap_content"
 
             android:text="@string/add"
-            android:layout_below="@+id/locationText"
+            android:layout_marginTop="69dp"
+            android:layout_below="@+id/friendWith"
             android:layout_centerHorizontal="true" />
+
+        <EditText
+            android:id="@+id/friendWith"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/locationText"
+            android:layout_below="@+id/locationText"
+            android:ems="10"
+            android:hint="Friend"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/remindMin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/friendWith"
+            android:layout_below="@+id/friendWith"
+            android:ems="10"
+            android:hint="@string/remind"
+            android:inputType="number" />
 
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

@@ -89,6 +89,7 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(MeetingFriend.COLUMN_FRIEND_ID, f.getId());
         values.put(MeetingFriend.COLUMN_MEETING_ID, m.getId());
         db.insert(MeetingFriend.TABLE_NAME, null, values);
+        db.close();
     }
 
 
@@ -105,6 +106,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         // Close cursor
         cursor.close();
+        db.close();
         return friends;
     }
 
@@ -121,6 +123,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         // Close cursor
         cursor.close();
+        db.close();
         return meetings;
 
     }
@@ -137,6 +140,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 friends.put(f.getId(), f);
             } while (cursor.moveToNext());
         }
+        cursor.close();
+        db.close();
 
         return friends;
 
@@ -157,6 +162,7 @@ public class DBHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 long friendId = cursor.getInt(0);
+                Log.i("friendsID from meeting",""+friendId);
                 resultFriends.add(friendsData.get(friendId));
             } while (cursor.moveToNext());
         }
@@ -174,6 +180,9 @@ public class DBHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT count(*) FROM " + tableName, null);
         cursor.moveToFirst();
         int icount = cursor.getInt(0);
+
+        cursor.close();
+        db.close();
         if(icount>0) {
             return false;
         }else return true;
@@ -187,35 +196,15 @@ public class DBHelper extends SQLiteOpenHelper {
                 + f.getId(), null);
         cursor.moveToFirst();
         int icount = cursor.getInt(0);
+        cursor.close();
+        db.close();
         if(icount>0) {
             return true;
         }else return false;
+
     }
 
-//    public Friend findFriendFromMeeting(Friend f){
-//        SQLiteDatabase db = this.getWritableDatabase();
-//
-//        HashMap<Integer, Friend> friendsData = getAllMappedFriends();
-//        Friend resultF = null;
-//        long friendId = f.
-//
-//        Cursor cursor = db.rawQuery("SELECT * FROM " + MeetingFriend.TABLE_NAME + " WHERE " + MeetingFriend.COLUMN_FRIEND_ID + " = "
-//                + f.getId(), null);
-//
-//        if (cursor.moveToFirst()) {
-//            do {
-//                if (long friendId = cursor.getInt(0)){
-//
-//                };
-//                resultF = friendsData.get(friendId);
-//            } while (cursor.moveToNext());
-//        }
-//        cursor.close();
-//        db.close();
-//
-//        return resultF;
-//
-//    }
+
 
     public Friend getFriendById(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -233,6 +222,26 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
 
         return f;
+    }
+
+    public Friend getFriendByName(String name){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + Friend.TABLE_NAME + " WHERE " + Friend.COLUMN_NAME + " = '"
+                + name+"'", null);
+
+        Friend f = null;
+        if (cursor.moveToFirst()) {
+            do {
+                f = new Friend(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getLong(3));
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+
+        return f;
+
+
     }
 
     public void updateFriendById(int id, Friend newFriend){

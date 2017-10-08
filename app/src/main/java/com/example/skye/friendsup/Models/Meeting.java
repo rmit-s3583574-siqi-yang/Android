@@ -1,10 +1,5 @@
 package com.example.skye.friendsup.Models;
 
-import android.app.Service;
-
-/**
- * Created by Yanni on 28/9/17.
- */
 
 public class Meeting {
     public static final String TABLE_NAME = "meetings";

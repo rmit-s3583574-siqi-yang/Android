@@ -30,7 +30,7 @@ public class NetworkStateService extends Service {
                 info = connectivityManager.getActiveNetworkInfo();
                 if(info == null || !info.isAvailable()) {
                     Toast.makeText(context, "no net work", Toast.LENGTH_SHORT).show();
-                }
+                }else Toast.makeText(context, "We have network!", Toast.LENGTH_SHORT).show();
             }
         }
     };

@@ -38,7 +38,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:onClick="addNewM"
-            android:text="@string/add" />
+            android:text="@string/suggest" />
 
         <ListView
             android:id="@+id/meetingList"

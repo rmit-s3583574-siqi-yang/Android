@@ -1,7 +1,14 @@
 package com.example.skye.friendsup.Activity;
 
+import android.app.AlarmManager;
 import android.app.DialogFragment;
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.SystemClock;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,13 +16,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.skye.friendsup.Models.Friend;
 import com.example.skye.friendsup.utils.DBHelper;
 import com.example.skye.friendsup.Models.Meeting;
 import com.example.skye.friendsup.R;
 import com.example.skye.friendsup.utils.DateFormatter;
+import com.example.skye.friendsup.utils.NotificationPublisher;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+
+import static com.example.skye.friendsup.Activity.AddMeetingActivity.scheMeeting;
 
 
 public class EditMeetingActivity extends AppCompatActivity {
@@ -28,15 +41,11 @@ public class EditMeetingActivity extends AppCompatActivity {
     private EditText startTimeText;
     private EditText endTimeText;
     private EditText locationText;
+    private EditText friendShowText;
     private DBHelper dbHelper;
 
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
     private int editId;
-
-
-//    private int minu = tminu;
-//    private int hour = thour;
-
 
 
     @Override
@@ -50,7 +59,9 @@ public class EditMeetingActivity extends AppCompatActivity {
         startTimeText = (EditText)findViewById(R.id.startText);
         endTimeText = (EditText)findViewById(R.id.endText);
         locationText = (EditText)findViewById(R.id.locationText2);
+        friendShowText = (EditText)findViewById(R.id.friendShow);
         addMeetingBtn = (Button)findViewById(R.id.addMeeting2);
+
 
 
         dbHelper = new DBHelper(getApplicationContext());
@@ -58,16 +69,21 @@ public class EditMeetingActivity extends AppCompatActivity {
         editId = intent.getIntExtra("id",1);
 
         Meeting m = dbHelper.getMeetingById(editId);
+        //ArrayList<Friend> friendsList = dbHelper.getFriendsFromMeeting(m);
 
 
         titleText.setText(m.getTitle());
         startTimeText.setText(sdf.format(m.getStartTime()));
         endTimeText.setText(sdf.format(m.getEndTime()));
         locationText.setText(m.getLocation());
+        //friendShowText.setText(friendsList.get(0).getName());
 
-//
-//        friendImg = R.drawable.icon0;
-//        image = (ImageView)findViewById(R.id.imageView2);
+        if (scheMeeting ==true){
+            showReminder();
+            scheMeeting =false;
+
+        }
+
 
         startTimeText.setOnClickListener(addMeetingActivityListener);
 
@@ -95,6 +111,96 @@ public class EditMeetingActivity extends AppCompatActivity {
 
     }
 
+
+
+    private void showReminder(){
+//        Intent intent = getIntent();
+//        editId = intent.getIntExtra("id",1);
+//        final Meeting m = dbHelper.getMeetingById(editId);
+//        ArrayList<Friend> friendsList = dbHelper.getFriendsFromMeeting(m);
+        AlertDialog alertDialog = new AlertDialog.Builder(EditMeetingActivity.this).create();
+        alertDialog.setTitle("You have a meeting soon:");
+        alertDialog.setMessage("What do you want to do?");
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Remind",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        reSchedualRemind(getNotification("You have a meeting!"),60000);
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Dismiss",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        AlertDialog alertlog = new AlertDialog.Builder(EditMeetingActivity.this).create();
+                        alertlog.setTitle("Confirm to Cancel the meeting?");
+                        alertlog.setMessage("This CAN NOT be undone!");
+                        alertlog.setButton(AlertDialog.BUTTON_NEGATIVE, "YES",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Meeting m = dbHelper.getMeetingById(editId);
+
+                                        //TODO remove Meeting
+                                        dbHelper.removeMeeting(m);
+                                        Toast.makeText(getApplicationContext(),"The meeting has been canceled", Toast.LENGTH_LONG).show();
+                                        dialog.dismiss();
+                                        finish();
+                                    }
+                                });
+                        alertlog.setButton(AlertDialog.BUTTON_POSITIVE, "NO",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        showReminder();
+                                        dialog.dismiss();
+                                    }
+                                });
+
+                        alertlog.show();
+                        dialog.dismiss();
+
+
+
+                    }
+                });
+
+        alertDialog.show();
+
+    }
+
+
+
+
+    private void reSchedualRemind(Notification notification, int remind){
+        Intent notificationIntent = new Intent(this, NotificationPublisher.class);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+            long futureInMillis = SystemClock.elapsedRealtime() + remind;
+            AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+
+
+    }
+
+    private Notification getNotification(String content) {
+        Intent intent = new Intent(this,EditMeetingActivity.class);
+        PendingIntent showMain = PendingIntent.getActivity(this,102,intent,0);
+        Notification.Builder builder = new Notification.Builder(this);
+        builder.setContentTitle("FriendsUp!");
+        builder.setContentText(content);
+        builder.addAction(android.R.drawable.sym_action_chat,"Show",showMain);
+        builder.setSmallIcon(android.R.drawable.sym_def_app_icon);
+        //builder.setContentIntent(showMain);
+        return builder.build();
+    }
+
     private void pickTime(String label) {
         DialogFragment mf = new MeetingDatePickerFragment();
         Bundle bundle = new Bundle();
@@ -117,8 +223,6 @@ public class EditMeetingActivity extends AppCompatActivity {
                 case R.id.addMeeting2:
                     editMeeting();
                     break;
-
-
                 default:
                     break;
             }
@@ -157,95 +261,10 @@ public class EditMeetingActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
-
-
-    }
-
-
-    public void pickTime1(View view){
-
-
-        EditText dateText1 = (EditText)findViewById(R.id.startText);
-//        dateText1.setText(thour+":"+tminu);
-//
-//        android.app.DialogFragment newFragment = new TimePickerFragment();
-//        newFragment.show(getFragmentManager(), "timePickFragment");
-//
-//        hour = thour;
-//        minu = tminu;
-//
-//        dateText1.setText(hour+":"+minu);
-//        startTime.set(Calendar.YEAR,Calendar.MONTH,Calendar.DATE,hour,minu);
-//
-//
-//
-//        Log.i(TAG,"The Time is "+startTime.get(Calendar.DAY_OF_MONTH)+"/"+startTime.get(Calendar.MONTH)+"/"+startTime.get(Calendar.YEAR)+
-//                "\n"+startTime.get(Calendar.HOUR_OF_DAY)+":"+startTime.get(Calendar.MINUTE));
     }
 
 
 
-    public void refreshT1(View view){
-        EditText dateText1 = (EditText)findViewById(R.id.startText);
-
-
-
-//        hour = thour;
-//        minu = tminu;
-//
-//        dateText1.setText(hour+":"+minu);
-//        startTime.set(Calendar.YEAR,Calendar.MONTH,Calendar.DATE,hour,minu);
-//
-//
-//
-//        Log.i(TAG,"The Time is "+startTime.get(Calendar.DAY_OF_MONTH)+"/"+startTime.get(Calendar.MONTH)+"/"+startTime.get(Calendar.YEAR)+
-//                "\n"+startTime.get(Calendar.HOUR_OF_DAY)+":"+startTime.get(Calendar.MINUTE));
-
-    }
-
-
-
-    public void pickTime2(View view){
-
-
-//        EditText dateText2 = (EditText)findViewById(R.id.endText2);
-//        dateText2.setText(thour+":"+tminu);
-//
-//        android.app.DialogFragment newFragment = new TimePickerFragment();
-//        newFragment.show(getFragmentManager(), "timePickFragment");
-//
-//        hour = thour;
-//        minu = tminu;
-//
-//        dateText2.setText(hour+":"+minu);
-//        endTime.set(Calendar.YEAR,Calendar.MONTH,Calendar.DATE,hour,minu);
-//
-//
-//
-//        Log.i(TAG,"The Time is "+endTime.get(Calendar.DAY_OF_MONTH)+"/"+endTime.get(Calendar.MONTH)+"/"+endTime.get(Calendar.YEAR)+
-//                "\n"+endTime.get(Calendar.HOUR_OF_DAY)+":"+endTime.get(Calendar.MINUTE));
-    }
-
-
-
-    public void refreshT2(View view){
-        EditText dateText2 = (EditText)findViewById(R.id.endText);
-
-
-
-//        hour = thour;
-//        minu = tminu;
-//
-//        dateText2.setText(hour+":"+minu);
-//        endTime.set(Calendar.YEAR,Calendar.MONTH,Calendar.DATE,hour,minu);
-//
-//
-//
-//        Log.i(TAG,"The Time is "+endTime.get(Calendar.DAY_OF_MONTH)+"/"+endTime.get(Calendar.MONTH)+"/"+endTime.get(Calendar.YEAR)+
-//                "\n"+endTime.get(Calendar.HOUR_OF_DAY)+":"+endTime.get(Calendar.MINUTE));
-
-    }
 
 
 }

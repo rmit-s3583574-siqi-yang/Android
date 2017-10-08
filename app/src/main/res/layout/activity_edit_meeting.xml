@@ -72,5 +72,14 @@
             android:ems="10"
             android:hint="@string/title"
             android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/friendShow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/locationText2"
+            android:layout_below="@+id/locationText2"
+            android:ems="10"
+            android:inputType="textPersonName" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

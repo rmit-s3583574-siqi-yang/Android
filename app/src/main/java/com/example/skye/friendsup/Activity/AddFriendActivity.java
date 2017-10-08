@@ -227,13 +227,10 @@ public class AddFriendActivity extends AppCompatActivity implements DatePickerDi
                     Log.i(TAG,"Permission declined");
 
                     // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
                 }
                 return;
             }
 
-            // other 'case' lines to check for other
-            // permissions this app might request
         }
     }
 

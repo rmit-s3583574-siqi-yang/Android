@@ -23,5 +23,7 @@
     <string name="birthday">Birthday</string>
     <string name="import_from_contact">Import from contact</string>
     <string name="title_activity_maps2">Map</string>
+    <string name="remind">Remind Me in X mins</string>
+    <string name="suggest">Suggest</string>
 
 </resources>

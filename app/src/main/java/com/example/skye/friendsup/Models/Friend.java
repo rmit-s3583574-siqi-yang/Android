@@ -1,13 +1,6 @@
 package com.example.skye.friendsup.Models;
 
-import java.util.Calendar;
-import java.util.UUID;
 
-import static android.R.attr.id;
-
-/**
- * Created by Yanni on 27/9/17.
- */
 
 public class Friend {
     public static final String TABLE_NAME = "friends";

@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
     private ArrayList<NearbyFriend> nearbyFriendArrayList = new ArrayList<NearbyFriend>();
 
     //list of nearby friend with walking time (seconds)
-    private LinkedList<NearbyFriendMidWalk> nearbyFriendWalkLinkedList = new LinkedList<NearbyFriendMidWalk>();
+    public static LinkedList<NearbyFriendMidWalk> nearbyFriendWalkLinkedList = new LinkedList<NearbyFriendMidWalk>();
 
     public static class NearbyFriend{
         public String namee;
@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
 
         friendsList = dbHelper.getAllFriends();
 
-        Log.i(TAG,"the first friend ID is:"+friendsList.get(0).getId());
+        //Log.i(TAG,"the first friend ID is:"+friendsList.get(0).getId());
 
         friendListAdapter = new FriendListAdapter(this, friendsList);
         friendsListView.setAdapter(friendListAdapter);
@@ -137,8 +137,6 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
                 for(int i=0; i<nearbyFriendWalkLinkedList.size(); i++){
                     Log.i("midpoint duration","Name:"+nearbyFriendWalkLinkedList.get(i).nameW+"lat: "+nearbyFriendWalkLinkedList.get(i).midlati+" lng: "+nearbyFriendWalkLinkedList.get(i).midlngi+"Dur:"+nearbyFriendWalkLinkedList.get(i).duration);
                 }
-
-
             }
 
             @Override
@@ -158,18 +156,18 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
         };
 
         if (ContextCompat.checkSelfPermission(MainActivity.this,
-                Manifest.permission.READ_CONTACTS)
+                Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
 
             // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
-                    Manifest.permission.READ_CONTACTS)) {
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
 
 
             } else {
 
                 ActivityCompat.requestPermissions(MainActivity.this,
-                        new String[]{Manifest.permission.READ_CONTACTS},
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_LOCATION);
 
             }
@@ -177,11 +175,6 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,5000,0,locationListener);
 
         }
-
-        //getCurrentUserLocation();
-
-
-
     }
 
 
@@ -196,19 +189,58 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_5:
-                scheduleNotification(getNotification("5 second delay"), 5000);
+                scheduleNotification(getNotification("Want to meet up?"), 5000);
                 return true;
             case R.id.action_10:
-                scheduleNotification(getNotification("10 second delay"), 10000);
+                scheduleNotification(getNotification("Want to meet up?"), 10000);
                 return true;
             case R.id.action_30:
-                scheduleNotification(getNotification("30 second delay"), 30000);
+                scheduleNotification(getNotification("Want to meet up?"), 30000);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+        Intent i = new Intent(this, EditFriendActivity.class);
+        i.putExtra("id",friendsList.get(position).getId());
+        startActivityForResult(i, EDIT_FRIEND_REQUEST);
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+        final int finalPosition = i;
+        AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+        alertDialog.setTitle("Remove Friend?");
+        alertDialog.setMessage("Are you sure to remove this friend?");
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "YES",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Friend f = friendsList.get(finalPosition);
+                        dbHelper.removeFriend(f);
+                        friendsList = dbHelper.getAllFriends();
+                        friendListAdapter.setFriendArrayList(friendsList);
+                        friendListAdapter.notifyDataSetChanged();
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "NO",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+        alertDialog.show();
+        return true;
+    }
+
+
+
+    // Alarm setting & xNotification
     private void scheduleNotification(Notification notification, int delay) {
 
         Intent notificationIntent = new Intent(this, NotificationPublisher.class);
@@ -218,14 +250,19 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
 
         long futureInMillis = SystemClock.elapsedRealtime() + delay;
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis,delay, pendingIntent);
+        //alarmManager.cancel(pendingIntent);
     }
 
     private Notification getNotification(String content) {
+        Intent intent = new Intent(this,AddMeetingActivity.class);
+        PendingIntent showMain = PendingIntent.getActivity(this,1,intent,0);
         Notification.Builder builder = new Notification.Builder(this);
-        builder.setContentTitle("Scheduled Notification");
+        builder.setContentTitle("FriendsUp!");
         builder.setContentText(content);
-        builder.setSmallIcon(R.drawable.icon0);
+        builder.addAction(android.R.drawable.sym_action_chat,"Show",showMain);
+        builder.setSmallIcon(android.R.drawable.sym_def_app_icon);
+        //builder.setContentIntent(showMain);
         return builder.build();
     }
 
@@ -313,9 +350,7 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
 
         Log.i("MidPoint status: ",lat3+ " " + lon3);
 
-        //Log.i("MidPoint status: ",(Math.toDegrees(lat3) + " " + Math.toDegrees(lon3)));
         return lat3;
-        //print out in degrees
 
     }
 
@@ -333,70 +368,13 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
         double lat3 = Math.atan2(Math.sin(lat1) + Math.sin(lat2), Math.sqrt((Math.cos(lat1) + Bx) * (Math.cos(lat1) + Bx) + By * By));
         double lon3 = lon1 + Math.atan2(By, Math.cos(lat1) + Bx);
 
-        lat3 = Math.toDegrees(lat3);
         lon3 = Math.toDegrees(lon3);
 
-        //Log.i("MidPoint status: ",lat3+ " " + lon3);
-        //Log.i("MidPoint status: ",(Math.toDegrees(lat3) + " " + Math.toDegrees(lon3)));
         return lon3;
-        //print out in degrees
 
     }
 
 
-
-//    public void getCurrentUserLocation(){
-//        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-//        LocationListener locationListener = new LocationListener() {
-//
-//            @Override
-//            public void onLocationChanged(Location location) {
-//                Log.i("Location status","lat:"+location.getLatitude()+"  Lng:"+location.getLongitude());
-//                userLocationLat = location.getLatitude();
-//                userLocationLng = location.getLongitude();
-//                Log.i("Location status","lat:"+userLocationLat+"  Lng:"+userLocationLng);
-//            }
-//
-//            @Override
-//            public void onStatusChanged(String s, int i, Bundle bundle) {
-//
-//            }
-//
-//            @Override
-//            public void onProviderEnabled(String s) {
-//
-//            }
-//
-//            @Override
-//            public void onProviderDisabled(String s) {
-//
-//            }
-//        };
-//
-//        if (ContextCompat.checkSelfPermission(MainActivity.this,
-//                Manifest.permission.READ_CONTACTS)
-//                != PackageManager.PERMISSION_GRANTED) {
-//
-//            // Should we show an explanation?
-//            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
-//                    Manifest.permission.READ_CONTACTS)) {
-//
-//
-//            } else {
-//
-//                ActivityCompat.requestPermissions(MainActivity.this,
-//                        new String[]{Manifest.permission.READ_CONTACTS},
-//                        MY_PERMISSIONS_REQUEST_LOCATION);
-//
-//            }
-//        }else{
-//            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,5000,0,locationListener);
-//
-//        }
-//
-//
-//    }
-//
 
 
 
@@ -411,7 +389,7 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
 
                     Log.i(TAG,"Permission granted");
 
-                    if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED)
+                    if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
                     locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,5000,0,locationListener);
 
                 } else {
@@ -454,6 +432,9 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
         }
     }
 
+
+
+
     private void refreshList(){
         friendsList = dbHelper.getAllFriends();
         friendListAdapter.setFriendArrayList(friendsList);
@@ -491,38 +472,5 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
         Log.i(TAG,"onDestroyFriends");
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-        Intent i = new Intent(this, EditFriendActivity.class);
-        i.putExtra("id",friendsList.get(position).getId());
-        startActivityForResult(i, EDIT_FRIEND_REQUEST);
-    }
 
-    @Override
-    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-        final int finalPosition = i;
-        AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
-        alertDialog.setTitle("Remove Friend?");
-        alertDialog.setMessage("Are you sure to remove this friend?");
-        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "YES",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Friend f = friendsList.get(finalPosition);
-                        dbHelper.removeFriend(f);
-                        friendsList = dbHelper.getAllFriends();
-                        friendListAdapter.setFriendArrayList(friendsList);
-                        friendListAdapter.notifyDataSetChanged();
-                        dialog.dismiss();
-                    }
-                });
-        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "NO",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-
-        alertDialog.show();
-        return true;
-    }
 }
