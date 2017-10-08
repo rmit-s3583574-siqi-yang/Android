@@ -21,12 +21,26 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.skye.friendsup.Controllers.FriendListAdapter;
+import com.example.skye.friendsup.View.DummyLocationService;
+import com.example.skye.friendsup.View.TestLocationService;
 import com.example.skye.friendsup.utils.DBHelper;
 import com.example.skye.friendsup.Models.Friend;
 import com.example.skye.friendsup.utils.NetworkStateService;
 import com.example.skye.friendsup.R;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+/**
+ * Created by skye on 27/9/17.
+ *
+ * Reference:
+ * [1]add time to current time: https://stackoverflow.com/a/9015586
+ * [2]calculate midpoint : https://stackoverflow.com/a/4656937
+ * [3]calculate distance between : https://stackoverflow.com/a/16794680
+ *
+ */
 
 
 public class MainActivity extends AppCompatActivity  implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener{
@@ -43,6 +57,33 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
 
     LocationManager locationManager ;
     LocationListener locationListener;
+    private double userLocationLat = 0.0;
+    private double userLocationLng = 0.0;
+
+
+    //list of nearby friend with 3 values
+    private ArrayList<NearbyFriend> nearbyFriendArrayList = new ArrayList<NearbyFriend>();
+
+    //list of nearby friend with walking time (seconds)
+    private LinkedList<NearbyFriendMidWalk> nearbyFriendWalkLinkedList = new LinkedList<NearbyFriendMidWalk>();
+
+    public static class NearbyFriend{
+        public String namee;
+        public double lat;
+        public double lng;
+
+    }
+
+
+    public static class NearbyFriendMidWalk{
+        public String nameW;
+        public double midlati;
+        public double midlngi;
+        public int duration;//seconds
+    }
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,18 +105,27 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
 
         friendsList = dbHelper.getAllFriends();
 
+        Log.i(TAG,"the first friend ID is:"+friendsList.get(0).getId());
+
         friendListAdapter = new FriendListAdapter(this, friendsList);
         friendsListView.setAdapter(friendListAdapter);
         friendsListView.setOnItemClickListener(this);
         friendsListView.setOnItemLongClickListener(this);
-
 
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         LocationListener locationListener = new LocationListener() {
 
             @Override
             public void onLocationChanged(Location location) {
-                Log.i("Location status",location.toString());
+                Log.i("Location status","lat:"+userLocationLat+"  Lng:"+userLocationLng);
+                Log.i("Location status","lat:"+location.getLatitude()+"  Lng:"+location.getLongitude());
+                userLocationLat = location.getLatitude();
+                userLocationLng = location.getLongitude();
+                Log.i("Location status","lat:"+userLocationLat+"  Lng:"+userLocationLng);
+                getNearbyFriendWalk();
+                for(int i=0; i<nearbyFriendWalkLinkedList.size(); i++){
+                    Log.i("midpoint duration","Name:"+nearbyFriendWalkLinkedList.get(i).nameW+"lat: "+nearbyFriendWalkLinkedList.get(i).midlati+" lng: "+nearbyFriendWalkLinkedList.get(i).midlngi+"Dur:"+nearbyFriendWalkLinkedList.get(i).duration);
+                }
             }
 
             @Override
@@ -92,10 +142,8 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
             public void onProviderDisabled(String s) {
 
             }
-
-
-
         };
+
         if (ContextCompat.checkSelfPermission(MainActivity.this,
                 Manifest.permission.READ_CONTACTS)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -104,49 +152,178 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
             if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
                     Manifest.permission.READ_CONTACTS)) {
 
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
 
             } else {
-
-                // No explanation needed, we can request the permission.
 
                 ActivityCompat.requestPermissions(MainActivity.this,
                         new String[]{Manifest.permission.READ_CONTACTS},
                         MY_PERMISSIONS_REQUEST_LOCATION);
 
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
             }
         }else{
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,5000,0,locationListener);
 
         }
 
-
-
-
+        //getCurrentUserLocation();
 
 
 
     }
 
-//    protected void createLocationRequest() {
-//        LocationRequest mLocationRequest = new LocationRequest();
-//        mLocationRequest.setInterval(10000);
-//        mLocationRequest.setFastestInterval(5000);
-//        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-//    }
 
-//    public void updateLocation(){
-//        {
-//            updateLocation();
-//            //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,5000,0,locationListener);
+
+    public void getNearbyFriendWalk(){
+
+        List<DummyLocationService.FriendLocation> friendsRange = TestLocationService.test(this);
+
+        for (int i=0;i<friendsRange.size();i++){
+            NearbyFriend nearbyFriends = new NearbyFriend();
+            nearbyFriends.namee = friendsRange.get(i).name;
+            nearbyFriends.lat = friendsRange.get(i).latitude;
+            nearbyFriends.lng = friendsRange.get(i).longitude;
+            nearbyFriendArrayList.add(nearbyFriends);
+
+        }
+
+        for (int i=0; i<nearbyFriendArrayList.size(); i++){
+            NearbyFriendMidWalk nearbyFriendWalk = new NearbyFriendMidWalk();
+            nearbyFriendWalk.nameW = nearbyFriendArrayList.get(i).namee;
+            nearbyFriendWalk.midlati = midPointLat(nearbyFriendArrayList.get(i).lat,nearbyFriendArrayList.get(i).lng,userLocationLat,userLocationLng);
+            nearbyFriendWalk.midlngi = midPointLng(nearbyFriendArrayList.get(i).lat,nearbyFriendArrayList.get(i).lng,userLocationLat,userLocationLng);;
+            nearbyFriendWalk.duration = getNearbyFriendDuration(nearbyFriendWalk.midlati,userLocationLat,nearbyFriendWalk.midlngi,userLocationLng,0.0,0.0);
+            nearbyFriendWalkLinkedList.addLast(nearbyFriendWalk);
+        }
+    }
+
+
+
+
+    public static int getNearbyFriendDuration(double lat1, double lat2, double lon1,
+                                  double lon2, double el1, double el2) {
+
+        final int R = 6371; // Radius of the earth
+
+        double latDistance = Math.toRadians(lat2 - lat1);
+        double lonDistance = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double distance = R * c * 1000; // convert to meters
+
+        double height = el1 - el2;
+
+        distance = Math.pow(distance, 2) + Math.pow(height, 2);
+
+        double meters =  Math.sqrt(distance);
+        double secondsWalk = meters/1.5;
+        return (int)secondsWalk;
+    }
+
+    public double midPointLat(double lat1,double lon1,double lat2,double lon2){
+
+        double dLon = Math.toRadians(lon2 - lon1);
+
+        //convert to radians
+        lat1 = Math.toRadians(lat1);
+        lat2 = Math.toRadians(lat2);
+        lon1 = Math.toRadians(lon1);
+
+        double Bx = Math.cos(lat2) * Math.cos(dLon);
+        double By = Math.cos(lat2) * Math.sin(dLon);
+        double lat3 = Math.atan2(Math.sin(lat1) + Math.sin(lat2), Math.sqrt((Math.cos(lat1) + Bx) * (Math.cos(lat1) + Bx) + By * By));
+        double lon3 = lon1 + Math.atan2(By, Math.cos(lat1) + Bx);
+
+        lat3 = Math.toDegrees(lat3);
+        lon3 = Math.toDegrees(lon3);
+
+        Log.i("MidPoint status: ",lat3+ " " + lon3);
+
+        //Log.i("MidPoint status: ",(Math.toDegrees(lat3) + " " + Math.toDegrees(lon3)));
+        return lat3;
+        //print out in degrees
+
+    }
+
+    public double midPointLng(double lat1,double lon1,double lat2,double lon2){
+
+        double dLon = Math.toRadians(lon2 - lon1);
+
+        //convert to radians
+        lat1 = Math.toRadians(lat1);
+        lat2 = Math.toRadians(lat2);
+        lon1 = Math.toRadians(lon1);
+
+        double Bx = Math.cos(lat2) * Math.cos(dLon);
+        double By = Math.cos(lat2) * Math.sin(dLon);
+        double lat3 = Math.atan2(Math.sin(lat1) + Math.sin(lat2), Math.sqrt((Math.cos(lat1) + Bx) * (Math.cos(lat1) + Bx) + By * By));
+        double lon3 = lon1 + Math.atan2(By, Math.cos(lat1) + Bx);
+
+        lat3 = Math.toDegrees(lat3);
+        lon3 = Math.toDegrees(lon3);
+
+        //Log.i("MidPoint status: ",lat3+ " " + lon3);
+        //Log.i("MidPoint status: ",(Math.toDegrees(lat3) + " " + Math.toDegrees(lon3)));
+        return lon3;
+        //print out in degrees
+
+    }
+
+
+
+//    public void getCurrentUserLocation(){
+//        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+//        LocationListener locationListener = new LocationListener() {
+//
+//            @Override
+//            public void onLocationChanged(Location location) {
+//                Log.i("Location status","lat:"+location.getLatitude()+"  Lng:"+location.getLongitude());
+//                userLocationLat = location.getLatitude();
+//                userLocationLng = location.getLongitude();
+//                Log.i("Location status","lat:"+userLocationLat+"  Lng:"+userLocationLng);
+//            }
+//
+//            @Override
+//            public void onStatusChanged(String s, int i, Bundle bundle) {
+//
+//            }
+//
+//            @Override
+//            public void onProviderEnabled(String s) {
+//
+//            }
+//
+//            @Override
+//            public void onProviderDisabled(String s) {
+//
+//            }
+//        };
+//
+//        if (ContextCompat.checkSelfPermission(MainActivity.this,
+//                Manifest.permission.READ_CONTACTS)
+//                != PackageManager.PERMISSION_GRANTED) {
+//
+//            // Should we show an explanation?
+//            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
+//                    Manifest.permission.READ_CONTACTS)) {
+//
+//
+//            } else {
+//
+//                ActivityCompat.requestPermissions(MainActivity.this,
+//                        new String[]{Manifest.permission.READ_CONTACTS},
+//                        MY_PERMISSIONS_REQUEST_LOCATION);
+//
+//            }
+//        }else{
+//            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,5000,0,locationListener);
+//
 //        }
-//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,5000,0,locationListener);
+//
+//
 //    }
+//
 
 
 
@@ -161,26 +338,16 @@ public class MainActivity extends AppCompatActivity  implements AdapterView.OnIt
 
                     Log.i(TAG,"Permission granted");
 
-                    //TODO get real location
                     if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED)
                     locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,5000,0,locationListener);
-                    //locationText.setText("-37.808148,144.962692");
-
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
 
                 } else {
                     Toast.makeText(MainActivity.this, "Permission denied to get location", Toast.LENGTH_LONG).show();
                     Log.i(TAG,"Permission declined");
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
                 }
                 return;
             }
 
-            // other 'case' lines to check for other
-            // permissions this app might request
         }
     }
 
